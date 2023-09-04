@@ -1,4 +1,3 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
 
@@ -18,14 +17,34 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
+# Next.js TESLO-SHOP
+Para ejecutar la app localmente:
+Objetos necesarios:
+Base de datos
+```
+docker-compose up -d
+```
 
-To learn more about Next.js, take a look at the following resources:
+* El -d, significa __detached__
+* No se quiere que siga ejecutando en la consola
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Mongo URL Local:
+```
+mongodb://localhost:27017/teslodb
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+##Configurar las variables de entorno
+Renombrar el archivo __.env.template__ a __.env__
+Y las siguientes variables:
+SECRET_KEY=
+MONGO_URL=
+NEXT_PUBLIC_CLIENT_KEY=
+
+##Llenar la base  de datos con informacion de prueba 
+llamar: 
+```
+http://localhost:3000/api/XXXXX
+```
 
 ## Deploy on Vercel
 
