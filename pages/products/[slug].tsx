@@ -40,6 +40,7 @@ const ProductPage:FC<Props> = ({product}) => {
         quantity: 1
     });
 
+    //SELECIONAR TAMANO DE LOS PRODUCTOS ......................
     const selectedSize = ( size: ISize) => {
         console.log(size);
         setTemCartProduct( currentproduct => ({
@@ -49,6 +50,19 @@ const ProductPage:FC<Props> = ({product}) => {
         }));
     }
 
+    //CONTADOR DE PRODUCTOS ......................
+    const onAddProduct = () => {
+        console.log({temCartProduct});
+    }
+
+    const onUpdateQuantity = ( newQuiantity: number) => {
+        console.log({temCartProduct});
+        setTemCartProduct( currentProduct => ({
+            ...currentProduct,
+            quantity: newQuiantity
+        }));
+    }
+    
     return (
     <ShopLayout title={product.title} pageDiscription={product.description}>
         <Grid container spacing={3}>
@@ -64,12 +78,18 @@ const ProductPage:FC<Props> = ({product}) => {
                         {product.title}
                     </Typography>
                     <Typography variant='h2' component='h2'>
-                        {product.price}
+                        $ {product.price}
                     </Typography>
                     
                     <Box sx={{ my: 2}}>
                         <Typography variant='subtitle2'>Cantidad</Typography>
-                        <ItemCounter/>
+                        
+                        <ItemCounter
+                            currentValue={temCartProduct.quantity}
+                            updatedQuantity= { onUpdateQuantity }
+                            maxValue= { product.inStock > 5 ? 
+                            5: product.inStock }
+                        />
 
                         <SizeSelector sizes={product.sizes}
                          selectedSize={temCartProduct.size}
@@ -80,7 +100,9 @@ const ProductPage:FC<Props> = ({product}) => {
                     {/*Agregar al carrito */}
                     {
                         (product.inStock > 0 )? (
-                            <Button color="secondary" className='circular-btn'>
+                            <Button color="secondary" 
+                            className='circular-btn'
+                            onClick={onAddProduct}>
                                 {
                                     temCartProduct.size ?
                                     'Agregar al carrito'
@@ -92,9 +114,7 @@ const ProductPage:FC<Props> = ({product}) => {
                             label="No disponible" color='error' variant='outlined'
                             ></Chip>
                         )
-
                     }
-
                     {/*Descripcion */}
                     <Box sx={{ mt: 3}}>
                         <Typography variant='subtitle2'> Descripcion</Typography>
