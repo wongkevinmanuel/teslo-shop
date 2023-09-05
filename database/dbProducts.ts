@@ -2,8 +2,7 @@ import { IProduct } from "../interfaces";
 import { Product } from "../models";
 import { db } from './';
 
-//return Promise or null
-//return por defecto de una function es undefined
+
 export const getProductBySlug = async(slug: string): 
                                     Promise<IProduct | null>=>{
     
@@ -56,5 +55,14 @@ export const getAllProducts = async() : Promise<IProduct[] > => {
     await db.connect();
     const products = await Product.find().select('title images price inStock slug -_id').lean();
     await db.disconnect();
+    
     return products;
+
+    /* OTRA MANERA
+    await db.connect();
+    const products = await Product.find().lean();
+    await db.disconnect();
+    //forzar al objeto de que sea serializado como string
+    return JSON.parse( JSON.stringify (product ) );
+    */
 }

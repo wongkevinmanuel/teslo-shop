@@ -1,8 +1,6 @@
 import { UiState } from './'
 
-
 //acciones permitidas
-//recibe tipo y el payload 
 //(informacion q recibe para generar nuevo estado)
 type UiActionType = 
 | { type: '[Ui]-Abrir-Menu'};

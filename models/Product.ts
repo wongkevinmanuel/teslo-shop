@@ -41,5 +41,3 @@ const Product: Model< IProduct > =
 mongoose.models.Product || model('Product', productSchema);
 
 export default Product;
-
-// TODO: Crear indice de mongo

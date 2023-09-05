@@ -1,8 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { ShopLayout } from "../../components/layouts";
 import { ProductList } from "../../components/products/ProductList";
-import { useProducts } from "../../hooks/useProducts";
-import { FullScreenLoading } from "../../components/ui";
 import { GetServerSideProps, NextPage } from 'next'
 import { dbProducts } from "../../database";
 import { IProduct } from "../../interfaces";
@@ -33,6 +31,7 @@ const SearchPage: NextPage<Props> = ({ products , foundProducts, query}) => {
     </ShopLayout>
   )
 }
+
 
 //Deberías usar getServerSideProps cuando:
 //Solo si necesita renderizar previamente una página 

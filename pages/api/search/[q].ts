@@ -41,8 +41,3 @@ const searchProducts = async(req: NextApiRequest, res: NextApiResponse<Data>) =>
     return res.status(200).json(products);
 
 }
-
-/* function buscar():Promise<String> {
-    let a: string = 's';
-    return Promise<a>;
-} */

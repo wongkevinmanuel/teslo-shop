@@ -18,11 +18,9 @@ export const SideMenu = () => {
         if( searchTerm.trim().length === 0 ){
             return;
         }
-
         navigateTo(`/search/${ searchTerm }`);
     }
     
-
     const navigateTo = ( url:string ) => {
         openSideMenu();
         router.push(url);    
@@ -33,14 +31,13 @@ export const SideMenu = () => {
         open={ isMenuOpen }
         onClose={openSideMenu}
         anchor='right'
-        sx={{ backdropFilter: 'blur(4px)', transition: 'all 0.5s ease-out' }}
-    >
-        <Box sx={{ width: 250, paddingTop: 5 }}>
-            
-            <List>
+        sx={{ backdropFilter: 'blur(4px)', transition: 'all 0.5s ease-out' }}>
 
+        <Box sx={{ width: 250, paddingTop: 5 }}>
+            <List>
                 <ListItem>
                     <Input
+                        autoFocus
                         value={searchTerm}
                         onChange={ (e) => setSearchTerm(e.target.value)}
                         onKeyUp={ (e) => 

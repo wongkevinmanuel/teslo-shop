@@ -8,8 +8,7 @@ export const FullScreenLoading = () => {
     flexDirection='column'
     justifyContent='center'
     alignItems='center' 
-    height='calc(100vh - 200px)'
-    >
+    height='calc(100vh - 200px)'>
         <Typography sx={{ mb: 3}} 
         variant='h2'
         fontWeight={200}> Cargando... </Typography>

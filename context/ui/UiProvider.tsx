@@ -22,11 +22,6 @@ export const UiProvider:FC<Props> = ({children}) => {
     //useReducer para administrar el estado
     const [state, dispatch] = useReducer( uiReducer, Ui_INITIAL_STATE);
 
-    //METODOS PARA ABRIR MENU
-    //const closeSideMenu = () => {
-    //    dispatch({type:'[Ui]-Cerrar-Menu'});
-    //}
-    
     const openSideMenu = () => {
         dispatch({type:'[Ui]-Abrir-Menu'});
     } 

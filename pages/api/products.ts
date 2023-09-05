@@ -7,8 +7,7 @@ type Data = | IProduct[]
             | { menssage: String};
 
 export default function hanlder(req: NextApiRequest, res: NextApiResponse<Data>) {
-    switch(req.method)
-    {
+    switch(req.method){
         case 'GET':
                 return getProducts(req,res);
         case 'POST':

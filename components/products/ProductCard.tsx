@@ -4,7 +4,6 @@ import NextLink from 'next/link';
 import { Link, Box, Card, CardActionArea, CardMedia, Grid, Typography } from '@mui/material';
 import { IProduct } from '../../interfaces';
 
-
 interface Props{
     product: IProduct,
     children?: React.ReactNode;
@@ -26,7 +25,7 @@ export const ProductCard:FC<Props> = ({product}) => {
     : `/products/${product.images[0]}`
   }, [isHovered, product.images])
 
-  //MANEJO DE LOS METODOS PARA CARGAR TEXTOS Y 
+  //METODOS PARA CARGAR TEXTOS Y 
   // IMAGENES AL TIEMPO, NO SUPER MONTADO
   const[isImageLoaded, setIsImageLoaded] = useState(false);
 

@@ -15,8 +15,7 @@ export default async function hanlder(req: NextApiRequest
         if (process.env.NODE_ENV === 'production'){
             return res.status(400).json({ message:'NO tiene acceso al API'});
         }
-
-        //BD
+        
         await db.connect();
         //TODO: Controlar catch sin conexion
         await Product.deleteMany();

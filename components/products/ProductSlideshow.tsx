@@ -24,7 +24,6 @@ export const ProductSlideshow:FC<Props> = ({images}) => {
                             backgroundImage: `url(${url})`,
                             backgroundSize: 'cover'
                         }}>
-
                         </div>
                     </div>
                 )

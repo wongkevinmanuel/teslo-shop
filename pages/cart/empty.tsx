@@ -19,9 +19,7 @@ const EmptyPage = () => {
                 <Typography>
                     Su carrito esta vacio.
                 </Typography>
-                {/* <NextLink href='/' passHref> */}
                     <Link typography='h4' color='secondary'component={NextLink} href='/'> Regresar</Link>
-                {/* </NextLink> */}
             </Box>
         </Box>
     </ShopLayout>
