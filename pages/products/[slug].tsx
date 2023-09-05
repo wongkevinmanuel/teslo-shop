@@ -1,6 +1,6 @@
 import {FC } from 'react'
 import { ShopLayout } from '../../components/layouts';
-import { Box, Button, Grid, Typography } from '@mui/material';
+import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 import {ProductSlideshow, SizeSelector } from '../../components/products';
 import { ItemCounter } from '../../components/ui';
 import { IProduct } from '../../interfaces';
@@ -47,13 +47,25 @@ const ProductPage:FC<Props> = ({product}) => {
                     
                     <Box sx={{ my: 2}}>
                         <Typography variant='subtitle2'>Cantidad</Typography>
+                        <ItemCounter/>
+                        <SizeSelector sizes={product.sizes}/>
                     </Box>
-                    <ItemCounter/>
-                    <SizeSelector /* selectedSize={product.sizes[2]} */ sizes={product.sizes}/>
-                    <Button color="secondary" className='circular-btn'>
-                        Agregar al carrito
-                    </Button>
+                    
+                    {/*Agregar al carrito */}
+                    {
+                        (product.inStock > 0 )? (
+                            <Button color="secondary" className='circular-btn'>
+                                Agregar al carrito
+                            </Button>
+                        ):(
+                            <Chip
+                            label="No disponible" color='error' variant='outlined'
+                            ></Chip>
+                        )
 
+                    }
+
+                    {/*Descripcion */}
                     <Box sx={{ mt: 3}}>
                         <Typography variant='subtitle2'> Descripcion</Typography>
                         <Typography variant='body2'> {product.description}</Typography>

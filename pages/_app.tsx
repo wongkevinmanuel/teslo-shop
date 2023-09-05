@@ -8,19 +8,18 @@ import { CartProvider, UiProvider } from '../context';
 
 function MyApp({Component, pageProps}:AppProps ){
     return (
-        <SWRConfig
-            value={{
-            fetcher: (resource, init) => fetch(resource, init).then(res => res.json())
-        }}>
-            <CartProvider>
-                <UiProvider>
-                    <ThemeProvider theme={lightTheme}>
-                        <CssBaseline />
-                        <Component {...pageProps} />
-                    </ThemeProvider>
-                </UiProvider>
-            </CartProvider>
-        </SWRConfig>
+    <SWRConfig
+        value={{
+        fetcher: (resource, init) => fetch(resource, init).then(res => res.json())}}>
+        <CartProvider>
+            <UiProvider>
+                <ThemeProvider theme={lightTheme}>
+                    <CssBaseline />
+                    <Component {...pageProps} />
+                </ThemeProvider>
+            </UiProvider>
+        </CartProvider>
+    </SWRConfig>
     )
 }
 

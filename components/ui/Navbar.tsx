@@ -107,6 +107,7 @@ export const Navbar = () => {
                             <ShoppingCartOutlined />
                         </Badge>
                     </IconButton>
+                    
                 </Link>
             <Button onClick={openSideMenu}>
                 Menú
