@@ -1,9 +1,9 @@
-import {FC } from 'react'
+import { FC, useState } from 'react';
 import { ShopLayout } from '../../components/layouts';
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 import {ProductSlideshow, SizeSelector } from '../../components/products';
 import { ItemCounter } from '../../components/ui';
-import { IProduct } from '../../interfaces';
+import { ICartProduct, IProduct, ISize } from '../../interfaces';
 import { GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next';
 import { dbProducts } from '../../database';
 
@@ -24,9 +24,31 @@ const ProductPage:FC<Props> = ({product}) => {
     if(!product){
         <h1>No existe producto.</h1>
     } */
-    
+
     /* PAGINA PREGENERADA DEL LADO DEL SERVIDOR */
-    
+    //Tener estado local de la pagina
+    //products por slock
+    const [temCartProduct, setTemCartProduct] = useState<ICartProduct>({
+        //products siempre generado del lado del servidor
+        _id:product._id,
+        image: product.images[0],
+        price: product.price,
+        size: undefined,
+        slug: product.slug,
+        title:product.title,
+        gender: product.gender,
+        quantity: 1
+    });
+
+    const selectedSize = ( size: ISize) => {
+        console.log(size);
+        setTemCartProduct( currentproduct => ({
+            //desestructuracion 
+            ...currentproduct,
+            size: size
+        }));
+    }
+
     return (
     <ShopLayout title={product.title} pageDiscription={product.description}>
         <Grid container spacing={3}>
@@ -48,14 +70,22 @@ const ProductPage:FC<Props> = ({product}) => {
                     <Box sx={{ my: 2}}>
                         <Typography variant='subtitle2'>Cantidad</Typography>
                         <ItemCounter/>
-                        <SizeSelector sizes={product.sizes}/>
+
+                        <SizeSelector sizes={product.sizes}
+                         selectedSize={temCartProduct.size}
+                         onSelectedSize={ (size) => selectedSize(size)}
+                         />
                     </Box>
-                    
+                    {/* onSelectedSize={ selectedSize(size)} */}
                     {/*Agregar al carrito */}
                     {
                         (product.inStock > 0 )? (
                             <Button color="secondary" className='circular-btn'>
-                                Agregar al carrito
+                                {
+                                    temCartProduct.size ?
+                                    'Agregar al carrito'
+                                    : 'Seleccione una talla'
+                                }   
                             </Button>
                         ):(
                             <Chip
