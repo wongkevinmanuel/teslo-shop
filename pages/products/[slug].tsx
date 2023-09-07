@@ -1,4 +1,4 @@
-import { FC, useState } from 'react';
+import { FC, useContext, useState } from 'react';
 import { ShopLayout } from '../../components/layouts';
 import { Box, Button, Chip, Grid, Typography } from '@mui/material';
 import {ProductSlideshow, SizeSelector } from '../../components/products';
@@ -6,6 +6,8 @@ import { ItemCounter } from '../../components/ui';
 import { ICartProduct, IProduct, ISize } from '../../interfaces';
 import { GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next';
 import { dbProducts } from '../../database';
+import { useRouter } from 'next/router';
+import { CartContext } from '../../context';
 
 interface Props{
     product: IProduct
@@ -51,16 +53,28 @@ const ProductPage:FC<Props> = ({product}) => {
     }
 
     //CONTADOR DE PRODUCTOS ......................
-    const onAddProduct = () => {
-        console.log({temCartProduct});
-    }
-
     const onUpdateQuantity = ( newQuiantity: number) => {
         console.log({temCartProduct});
         setTemCartProduct( currentProduct => ({
             ...currentProduct,
             quantity: newQuiantity
         }));
+    }
+
+    const router = useRouter();
+    const { addProductToCart } = useContext(CartContext);
+
+    const onAddProduct = () => {
+        console.log({temCartProduct});
+        
+        //no existe
+        if (!temCartProduct.size) {return;}
+
+        //Guardar en reducer de CartProvider
+        addProductToCart( temCartProduct );
+
+        //TODO: llamar la accion del context para agregar al carrito
+        //router.push('/cart');
     }
     
     return (
