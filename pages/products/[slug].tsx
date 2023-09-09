@@ -42,17 +42,16 @@ const ProductPage:FC<Props> = ({product}) => {
         quantity: 1
     });
 
-    //SELECIONAR TAMANO DE LOS PRODUCTOS ......................
+    //SELECCIONAR TAMANO PRODUCTOS 
     const selectedSize = ( size: ISize) => {
-        console.log(size);
+        //desestructuracion con ... 
         setTemCartProduct( currentproduct => ({
-            //desestructuracion 
             ...currentproduct,
             size: size
         }));
     }
 
-    //CONTADOR DE PRODUCTOS ......................
+    //CONTADOR DE PRODUCTOS
     const onUpdateQuantity = ( newQuiantity: number) => {
         console.log({temCartProduct});
         setTemCartProduct( currentProduct => ({
@@ -65,8 +64,9 @@ const ProductPage:FC<Props> = ({product}) => {
     const { addProductToCart } = useContext(CartContext);
 
     const onAddProduct = () => {
+        console.log(`Se esta disparando onAddProduct:`);
         console.log({temCartProduct});
-        
+
         //no existe
         if (!temCartProduct.size) {return;}
 
