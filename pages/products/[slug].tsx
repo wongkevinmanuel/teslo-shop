@@ -7,7 +7,7 @@ import { ICartProduct, IProduct, ISize } from '../../interfaces';
 import { GetServerSideProps, GetStaticPaths, GetStaticProps } from 'next';
 import { dbProducts } from '../../database';
 import { useRouter } from 'next/router';
-import { CartContext } from '../../context';
+import  CartContext from '../../context/cart/CartContext';
 
 interface Props{
     product: IProduct

@@ -4,7 +4,6 @@ import { CartState } from './'
 //nombre accion y q dato espera
 type CartActionType = 
 | {type: 'Cart-load-from-cookies', payload: ICartProduct[]}
-//| {type: 'Cart-update-products' , payload: ICartProduct};
 | {type: 'Cart-update-products' , payload: ICartProduct[] };
 
 //1. En el reducer no ejecutar codigo de terceros.
@@ -21,8 +20,8 @@ switch (action.type) {
     case 'Cart-update-products':
       return {
         ...state,
-        cart: [ ...action.payload ]
-     }
+        cart: [...action.payload],
+      };
 
     default:
       return state;

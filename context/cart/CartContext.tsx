@@ -8,4 +8,6 @@ interface ContextProps {
     addProductToCart: (product: ICartProduct) => void;
 }
 
-export const CartContext = createContext({} as ContextProps);
+ const CartContext = createContext({} as ContextProps);
+
+ export default CartContext;
