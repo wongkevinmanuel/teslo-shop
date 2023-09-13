@@ -21,11 +21,18 @@ const CartProvider:FC<Props> = ({children}) => {
     //basado en argumentos, no interactura con el mundo exterior
     const [state, dispatch] = useReducer(cartReducer,Cart_ESTADO_INICIAL );
     
+    //
     useEffect(() => {
       Cookie.set('cart', JSON.stringify(state.cart));
 
     }, [state.cart])
     
+    //Se dispara cuando los productos cambian en el carrito compras
+    //Cuando cambie el state.cart se dispara funcion
+    useEffect(() => {
+      Cookie.set('cart', JSON.stringify(state.cart));
+
+    }, [state.cart])
 
     const addProductToCart = (product: ICartProduct) => {
         
