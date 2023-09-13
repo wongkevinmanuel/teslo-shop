@@ -1,7 +1,8 @@
-import {FC, useReducer,ReactNode} from 'react';
+import {FC, useReducer,ReactNode,useEffect} from 'react';
 import { ICartProduct } from '../../interfaces';
 import CartContext from './CartContext';
 import { cartReducer } from './cartReducer';
+import Cookie from 'js-cookie';
 
 export interface CartState{
     cart: ICartProduct[];
@@ -16,10 +17,17 @@ interface Props{
 }
 
 const CartProvider:FC<Props> = ({children}) => {
+    //Reducer = una funcion pura (resuelve informacion)
+    //basado en argumentos, no interactura con el mundo exterior
     const [state, dispatch] = useReducer(cartReducer,Cart_ESTADO_INICIAL );
     
-    const addProductToCart = (product: ICartProduct) =>{
-        
+    useEffect(() => {
+      Cookie.set('cart', JSON.stringify(state.cart));
+
+    }, [state.cart])
+    
+
+    const addProductToCart = (product: ICartProduct) => {
         
         //Se dispara la accion y se modifica el state
         /* Nivel final */
@@ -28,17 +36,13 @@ const CartProvider:FC<Props> = ({children}) => {
         
         //si no exites un producto, lo agrega
         if ( !productInCart ){
-            console.log('product in CartProvideer agregado al cart:');
-            console.log(product);
-            return dispatch({type:'Cart-update-products'
-            , payload: [...state.cart, product] });
+            return dispatch({type:'Cart-update-products', payload: [...state.cart , product] });
         }
 
         //existe el producto en el carrito, pero si verifica si es la misma talla
         const productInCartButDifferentSize = state.cart.some(p => p._id === product._id && p.size === product.size );
         if(!productInCartButDifferentSize){
-            return dispatch({type:'Cart-update-products'
-            , payload: [...state.cart, product] });
+            return dispatch({type:'Cart-update-products', payload: [...state.cart, product] });
         }
 
         //existe el producto con la misma talla 
@@ -53,15 +57,13 @@ const CartProvider:FC<Props> = ({children}) => {
                 p.quantity += product.quantity;
 
                 return p;
-            });
+            }); 
 
-        dispatch({type:'Cart-update-products'
-        , payload: updatedProducts });
+        dispatch({type:'Cart-update-products' , payload: updatedProducts });
     };
 
     return (
-        <CartContext.Provider 
-            value={{
+        <CartContext.Provider value={{
                 ...state,
                 //Methos
                 addProductToCart, 
