@@ -15,13 +15,14 @@ switch (action.type) {
     case 'Cart-load-from-cookies':
       return {
         ...state,
+        cart: [...action.payload],
      }
      
     case 'Cart-update-products':
       return {
         ...state,
         cart: [...action.payload],
-      };
+      }; 
 
     default:
       return state;

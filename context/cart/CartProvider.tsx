@@ -21,14 +21,20 @@ const CartProvider:FC<Props> = ({children}) => {
     //basado en argumentos, no interactura con el mundo exterior
     const [state, dispatch] = useReducer(cartReducer,Cart_ESTADO_INICIAL );
     
-    //
+    //Leer datos de la cookies y recargar el reducer = carrito compras
     useEffect(() => {
-      Cookie.set('cart', JSON.stringify(state.cart));
-
-    }, [state.cart])
+        try{
+            const cookieCartProduct = Cookie.get('cart') ? JSON.parse(Cookie.get('cart')! ): [];
+            dispatch({type:'Cart-load-from-cookies', payload: cookieCartProduct });
+        }catch(error){
+            dispatch({type:'Cart-load-from-cookies', payload: [] });
+        }
+    }, [])
     
+
     //Se dispara cuando los productos cambian en el carrito compras
     //Cuando cambie el state.cart se dispara funcion
+    //de guardar el carrito de compras en la cookie
     useEffect(() => {
       Cookie.set('cart', JSON.stringify(state.cart));
 

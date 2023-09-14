@@ -14,9 +14,9 @@ interface Props{
     editable ?: boolean;
     children ?: React.ReactNode
 }
-
+/*TODO: updatedQuantity agregar el metodo del compoenete <ItemCounter></ItemCounter> */
 export const CartList:FC<Props> = ({editable = false}) => {
-  return (
+return (
     <>
     {
         productsInCart.map(
@@ -39,7 +39,7 @@ export const CartList:FC<Props> = ({editable = false}) => {
                         <Typography variant='body1'>Talla:<strong>M</strong></Typography>
                         {
                             editable ?
-                            <ItemCounter currentValue={1} maxValue={5} updatedQuantity={()=>{}}/> :
+                            <ItemCounter currentValue={1} maxValue={5} updatedQuantity={ true }/> :
                             <Typography variant='h5'>3 items</Typography>
                         }
                     </Box>
