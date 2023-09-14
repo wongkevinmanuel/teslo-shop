@@ -39,7 +39,7 @@ export const CartList:FC<Props> = ({editable = false}) => {
                         <Typography variant='body1'>Talla:<strong>M</strong></Typography>
                         {
                             editable ?
-                            <ItemCounter/> :
+                            <ItemCounter currentValue={1} maxValue={5} updatedQuantity={()=>{}}/> :
                             <Typography variant='h5'>3 items</Typography>
                         }
                     </Box>
