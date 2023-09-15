@@ -31,7 +31,7 @@ const CartProvider:FC<Props> = ({children}) => {
         }
     }, [])
     
-
+    
     //Se dispara cuando los productos cambian en el carrito compras
     //Cuando cambie el state.cart se dispara funcion
     //de guardar el carrito de compras en la cookie
@@ -75,11 +75,16 @@ const CartProvider:FC<Props> = ({children}) => {
         dispatch({type:'Cart-update-products' , payload: updatedProducts });
     };
 
+    const updateCartQuantity = (product: ICartProduct) => {
+        dispatch({type: 'Cart-update-quantity-products', payload: product});
+    }
+
     return (
         <CartContext.Provider value={{
                 ...state,
                 //Methos
-                addProductToCart, 
+                addProductToCart,
+                updateCartQuantity 
             }}>
                 {children}
         </CartContext.Provider>
