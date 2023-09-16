@@ -74,6 +74,10 @@ const CartProvider:FC<Props> = ({children}) => {
 
         dispatch({type:'Cart-update-products' , payload: updatedProducts });
     };
+    
+    const removeCartProduct = (product: ICartProduct) => {
+        dispatch({type: 'Cart-remove-products', payload: product });
+    }
 
     const updateCartQuantity = (product: ICartProduct) => {
         dispatch({type: 'Cart-update-quantity-products', payload: product});
@@ -84,7 +88,8 @@ const CartProvider:FC<Props> = ({children}) => {
                 ...state,
                 //Methos
                 addProductToCart,
-                updateCartQuantity 
+                updateCartQuantity,
+                removeCartProduct 
             }}>
                 {children}
         </CartContext.Provider>
