@@ -7,7 +7,14 @@ type CartActionType =
 | {type: 'Cart-update-products' , payload: ICartProduct[] }
   //regresa todo el ICartProduct = nuevo producto con nueva cantidad
 | {type: 'Cart-update-quantity-products' , payload: ICartProduct }
-| {type: 'Cart-remove-products' , payload: ICartProduct };
+| {type: 'Cart-remove-products' , payload: ICartProduct }
+| {type: 'Cart-update-order-summary' , 
+  payload: {
+    numberOfItems: number;
+    subTotal: number;
+    tax: number;
+    total: number
+  }};
 
 //1. En el reducer no ejecutar codigo de terceros.
 //2. No ejecutar un codigo, que salga del alcancce de la funcion.
@@ -55,6 +62,11 @@ switch (action.type) {
           //  }
           //return true;
         }
+        case 'Cart-update-order-summary':
+          return {
+            ...state,
+            ...action.payload
+          }
 
     default:
       return state;

@@ -5,11 +5,20 @@ import { cartReducer } from './cartReducer';
 import Cookie from 'js-cookie';
 
 export interface CartState{
-    cart: ICartProduct[];
+    cart: ICartProduct[],
+
+    numberOfItems: number,
+    subTotal: number,
+    tax: number,
+    total: number
 }
 
 const Cart_ESTADO_INICIAL: CartState = {
     cart: [],
+    numberOfItems: 0,
+    subTotal: 0,
+    tax: 0,
+    total:0
 }
 
 interface Props{
@@ -56,7 +65,8 @@ const CartProvider:FC<Props> = ({children}) => {
                 tax : subTotal * taxRate,
                 total: subTotal  * ( taxRate + 1)
             }
-            console.log(orderSummary);
+            
+            dispatch({type:'Cart-update-order-summary', payload: orderSummary});
         }, [state.cart]
     );
 

@@ -7,9 +7,11 @@ import {Link, AppBar, Toolbar, Typography, Box, Button, IconButton, Badge, Input
 import { ClearOutlined, SearchOutlined, ShoppingCartOutlined} from '@mui/icons-material';
 import { useRouter } from 'next/router';
 import { UiContext } from "../../context";
+import CartContext from '../../context/cart/CartContext';
 
 export const Navbar = () => {
-    
+
+    const {numberOfItems} = useContext(CartContext);
     const {openSideMenu} = useContext(UiContext);
     const {asPath, push} = useRouter();
 
@@ -103,7 +105,7 @@ export const Navbar = () => {
             </IconButton>
                 <Link href='/cart' component={NextLink}>
                     <IconButton>
-                        <Badge badgeContent={2} color='secondary'>
+                        <Badge badgeContent={numberOfItems} color='secondary'>
                             <ShoppingCartOutlined />
                         </Badge>
                     </IconButton>
