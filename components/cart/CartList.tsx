@@ -12,6 +12,7 @@ interface Props{
     editable ?: boolean;
     children ?: React.ReactNode
 }
+
 /*TODO: updatedQuantity agregar el metodo del compoenete <ItemCounter></ItemCounter> */
 export const CartList:FC<Props> = ({editable = false}) => {
     const {cart} = useContext(CartContext);

@@ -17,6 +17,7 @@ interface Props{
 }
 
 const CartProvider:FC<Props> = ({children}) => {
+
     //Reducer = una funcion pura (resuelve informacion)
     //basado en argumentos, no interactura con el mundo exterior
     const [state, dispatch] = useReducer(cartReducer,Cart_ESTADO_INICIAL );
@@ -37,8 +38,27 @@ const CartProvider:FC<Props> = ({children}) => {
     //de guardar el carrito de compras en la cookie
     useEffect(() => {
       Cookie.set('cart', JSON.stringify(state.cart));
-
     }, [state.cart])
+
+
+    //cuando cambian los productos se dispara
+    //maneja numero de items, total a pagar
+    useEffect(
+        () => {
+            //total de items
+            const numberOfItems = state.cart.reduce( (previo, actual) => actual.quantity + previo, 0 );
+            const subTotal = state.cart.reduce( (previo, actual) => (actual.price * actual.quantity) + previo, 0 );
+            const taxRate = Number(process.env.NEXT_PUBLIC_TAX_RATE|| 0);
+
+            const orderSummary = {
+                numberOfItems,
+                subTotal,
+                tax : subTotal * taxRate,
+                total: subTotal  * ( taxRate + 1)
+            }
+            console.log(orderSummary);
+        }, [state.cart]
+    );
 
     const addProductToCart = (product: ICartProduct) => {
         
