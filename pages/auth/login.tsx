@@ -3,6 +3,8 @@ import { Box, Button, Grid, Link, TextField, Typography } from '@mui/material'
 import { AuthLayout } from '../../components/layouts'
 import NextLink from 'next/link';
 import { useForm } from 'react-hook-form';
+import { validations } from '../../util';
+import tesloApi from '../../api/tesloApi';
 
 type FormData = {
     email: string,
@@ -10,10 +12,20 @@ type FormData = {
 }
 
 const LoginPage = () => {
-    
+    //transformar objeto al valor boolean con !!
+    //!!errors.email
+    //TODO: Arreglar validation de email no funciona con validate: validations.isEmail
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
-    const onLoginUser = (data:FormData) =>{
-        console.log({data})
+    console.log({errors});
+    
+    const onLoginUser = async (dataForm:FormData) =>{
+        try{
+            const { data } = await tesloApi.post('/user/login', { dataForm });
+            const { token, user } = data;
+            console.log({token, user});
+        }catch(error){
+            console.log('Error en las credenciales');
+        }
     }
 
     return (
@@ -27,11 +39,23 @@ const LoginPage = () => {
                     </Grid>
                     <Grid item xs={12}>
                         <TextField label='Correo' variant='filled' type='email' fullWidth
-                        {...register('email')}></TextField>
+                        {...register('email',{
+                            required: 'Este campo es requerido',
+                            pattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                        })}
+
+                        error={ !!errors.email }
+                        helperText={errors.email?.message}></TextField>
                     </Grid>
                     <Grid item xs={12}>
                         <TextField label='Contraseña' type='password' variant='filled' fullWidth
-                        {...register('password')}></TextField>
+                        {...register('password',{
+                            required: 'Este campo es requerido',
+                            minLength: { value: 6 , message:'Minimo 6 caracteres.'}
+                        })}
+                        error={ !!errors.password}
+                        helperText={errors.password?.message}
+                        ></TextField>
                     </Grid>
 
                     <Grid item xs={12}>
