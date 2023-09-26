@@ -31,7 +31,7 @@ const LoginPage = () => {
         }
     }
 
-    const [showErrorChip,setShowErrorChip] = useState(true); //default false 
+    const [showErrorChip,setShowErrorChip] = useState(false); 
 
     return (
     <AuthLayout title='Ingresar'>

@@ -4,7 +4,7 @@ import { CssBaseline, ThemeProvider } from '@mui/material';
 
 import { lightTheme } from '../themes';
 import { SWRConfig } from 'swr';
-import { UiProvider } from '../context';
+import { AuthProvider, UiProvider } from '../context';
 import CartProvider from '../context/cart/CartProvider';
 
 function MyApp({Component, pageProps}:AppProps ){
@@ -12,14 +12,16 @@ function MyApp({Component, pageProps}:AppProps ){
     <SWRConfig
         value={{
         fetcher: (resource, init) => fetch(resource, init).then(res => res.json())}}>
-        <CartProvider>
-            <UiProvider>
-                <ThemeProvider theme={lightTheme}>
-                    <CssBaseline />
-                    <Component {...pageProps} />
-                </ThemeProvider>
-            </UiProvider>
-        </CartProvider>
+        <AuthProvider>
+            <CartProvider>
+                <UiProvider>
+                    <ThemeProvider theme={lightTheme}>
+                        <CssBaseline />
+                        <Component {...pageProps} />
+                    </ThemeProvider>
+                </UiProvider>
+            </CartProvider>
+        </AuthProvider>
     </SWRConfig>
     )
 }
