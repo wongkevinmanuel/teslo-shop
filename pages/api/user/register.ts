@@ -34,7 +34,7 @@ async function registerUser(request: NextApiRequest, response: NextApiResponse<D
 
     if(password.length < 6){
         return response.status(400)
-        .json({ message: 'La contrasena debe ser de 6 caracteres.' });
+        .json({ message: 'La contraseña debe ser de mayor a 6 caracteres.' });
     }
 
     if(name.length < 2){

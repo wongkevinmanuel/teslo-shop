@@ -1,44 +1,106 @@
 import React from 'react'
-import { AuthLayout } from '../../components/layouts';
-import { Box, Button, Grid, TextField, Typography, Link } from '@mui/material';
+import { useState } from 'react';
+
 import NextLink from 'next/link';
+import { Box, Button, Grid, TextField, Typography, Link, Chip } from '@mui/material';
+import { ErrorOutline, ErrorSharp } from '@mui/icons-material';
+import { useForm } from 'react-hook-form';
 
-const PageRegister = () => {
-  return (
-        <AuthLayout title='Registrar-Usuario'>
-        <Box sx={{ width: 350, padding:'10px 20px' }}>
-            <Grid container spacing={2}>
+import tesloApi from '../../api/tesloApi';
+import { AuthLayout } from '../../components/layouts';
+import { validations } from '../../util';
 
-                <Grid item xs={12}>
-                    <Typography variant='h1' component='h1'>Crear cuenta</Typography>
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField label='Nombre completo' variant='filled' fullWidth ></TextField>
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField label='Correo' variant='filled' fullWidth ></TextField>
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField label='Contrasena' type='password' variant='filled' fullWidth></TextField>
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField label='Repetir contrasena' type='password' variant='filled' fullWidth></TextField>
-                </Grid>
+type FormData = {
+    name : string;
+    email : string;
+    password : string;
+};
 
-                <Grid item xs={12}>
-                    <Button color='secondary' className='circular-btn' size='large' fullWidth>
-                    crear usuario
-                    </Button>
-                </Grid>
-                <Grid item xs={12} display='flex' justifyContent='end'>
-                    <Link href='/auth/login' component={NextLink} underline='always'>
-                        Ya tienes cuenta?
-                    </Link>
-                </Grid>
-            </Grid>
-        </Box>
-        </AuthLayout>
-  )
+const PageRegister = () => { 
+    
+    //react hook-form
+    const {register, handleSubmit, formState: {errors} } = useForm<FormData>(); 
+    const [mostrarMensajeError, establecerMensajeError] = useState(false);
+
+    const onRegisterForm = async ( {name, email, password}: FormData) =>{
+        
+        console.log(` name: ${name} `);
+        establecerMensajeError(false);
+
+        try{
+            const {data} = await tesloApi.post('/user/register', {name, email, password});
+            const {token, user} = data;
+            console.log({token, user});
+            
+        } catch (error){
+            console.log(`Error en las credenciales: errors:: ${error} `);
+            establecerMensajeError(true);
+            setTimeout(() => establecerMensajeError(false), 3000);
+        }
+    }
+
+    return (
+            <AuthLayout title='Registrar-Usuario'>
+                <form onSubmit={handleSubmit(onRegisterForm)} noValidate>
+                    <Box sx={{ width: 350, padding:'10px 20px' }}>
+                        <Grid container spacing={2}>
+
+                            <Grid item xs={12}>
+                                <Typography variant='h1' component='h1'>Crear cuenta</Typography>
+                                <Chip 
+                                    sx={{ display: mostrarMensajeError ? 'flex': 'none'}}
+                                    label='No reconocemos ese usuario / password'
+                                    color = 'error'
+                                    icon={<ErrorOutline/>}
+                                    className='fadeIn'></Chip>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField label='Nombre completo' variant='filled' fullWidth 
+                                {...register('name',{
+                                    required:'Este campo es requerido',
+                                    minLength: {value:2, message:'Mínimo 2 caracteres.'}})}
+                                    error={ !!errors.name}
+                                    helperText={errors.name?.message}
+                                    ></TextField>
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField label='Correo' variant='filled' fullWidth
+                                type='email'
+                                {...register('email', {
+                                    required:'Este campo es requerido',
+                                    pattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                                })}
+                                error={ !!errors.email}
+                                helperText={errors.email?.message}></TextField>
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <TextField label='Contraseña' type='password' variant='filled' fullWidth
+                                {...register('password',{
+                                    required:'Este campo es requerido',
+                                    minLength: {value: 6, message:'Mínimo 6 caracteres.'}
+
+                                })}
+                                error={!!errors.password}
+                                helperText={errors.password?.message}></TextField>
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                <Button color='secondary' className='circular-btn' size='large' fullWidth
+                                type='submit'>
+                                crear usuario
+                                </Button>
+                            </Grid>
+                            <Grid item xs={12} display='flex' justifyContent='end'>
+                                <Link href='/auth/login' component={NextLink} underline='always'>
+                                    Ya tienes cuenta?
+                                </Link>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </form>
+            </AuthLayout>
+    )
 }
 
 export default PageRegister;

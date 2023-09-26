@@ -31,7 +31,7 @@ const LoginPage = () => {
         }
     }
 
-    const [showErrorChip,setShowErrorChip] = useState(false);
+    const [showErrorChip,setShowErrorChip] = useState(true); //default false 
 
     return (
     <AuthLayout title='Ingresar'>
@@ -53,7 +53,7 @@ const LoginPage = () => {
                         {...register('email',{
                             required: 'Este campo es requerido',
                             pattern: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                        })}
+                            })}
 
                         error={ !!errors.email }
                         helperText={errors.email?.message}></TextField>
