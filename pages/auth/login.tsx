@@ -30,6 +30,7 @@ const LoginPage = () => {
         setShowErrorChip(false);
         //TODO: investigar sobre promises metodos all, then, catch
         const isValiadLogin = await loginUser(dataForm.email, dataForm.password);
+        
         if(!isValiadLogin){
             console.log('Error en las credenciales');
             setShowErrorChip(true);
@@ -39,17 +40,8 @@ const LoginPage = () => {
         //TODO: navegar a la pantalla del usuario
         router.replace('/');
 
-        /* try{
-            const { data } = await tesloApi.post('/user/login', { dataForm });
-            const { token, user } = data;
-            console.log({token, user});
-        }catch(error){
-            console.log('Error en las credenciales');
-            setShowErrorChip(true);
-            setTimeout( () => setShowErrorChip(false), 3000 );
-        } */
     }
-
+    
     const [showErrorChip,setShowErrorChip] = useState(false); 
 
     return (
