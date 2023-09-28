@@ -1,10 +1,15 @@
-import React, { useState } from 'react'
-import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material'
-import { AuthLayout } from '../../components/layouts'
+import React,{ useState } from 'react'
+import { useContext } from 'react'
 import NextLink from 'next/link';
-import { useForm } from 'react-hook-form';
-import tesloApi from '../../api/tesloApi';
+
+import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material'
 import { ErrorOutline } from '@mui/icons-material';
+import { useForm } from 'react-hook-form';
+
+import { AuthContext } from '../../context';
+import { AuthLayout } from '../../components/layouts'
+import tesloApi from '../../api/tesloApi';
+import { useRouter } from 'next/router';
 
 type FormData = {
     email: string,
@@ -12,15 +17,29 @@ type FormData = {
 }
 
 const LoginPage = () => {
-    //transformar objeto al valor boolean con !!
+    //transformar objeto al valor boolean con !!error.email
     //!!errors.email
     //TODO: Arreglar validation de email no funciona con validate: validations.isEmail
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
-    console.log({errors});
+    //console.log({errors});
     
+    const { loginUser } = useContext(AuthContext);
+    const router = useRouter();
+
     const onLoginUser = async (dataForm:FormData) =>{
         setShowErrorChip(false);
-        try{
+        //TODO: investigar sobre promises metodos all, then, catch
+        const isValiadLogin = await loginUser(dataForm.email, dataForm.password);
+        if(!isValiadLogin){
+            console.log('Error en las credenciales');
+            setShowErrorChip(true);
+            setTimeout( () => setShowErrorChip(false), 3000 );
+        }
+
+        //TODO: navegar a la pantalla del usuario
+        router.replace('/');
+
+        /* try{
             const { data } = await tesloApi.post('/user/login', { dataForm });
             const { token, user } = data;
             console.log({token, user});
@@ -28,7 +47,7 @@ const LoginPage = () => {
             console.log('Error en las credenciales');
             setShowErrorChip(true);
             setTimeout( () => setShowErrorChip(false), 3000 );
-        }
+        } */
     }
 
     const [showErrorChip,setShowErrorChip] = useState(false); 
