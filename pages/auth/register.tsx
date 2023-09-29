@@ -18,7 +18,9 @@ type FormData = {
     email : string;
     password : string;
 };
-
+/*
+https://om.chirmyram.com/tlv2/%E7%BE%8E%E5%89%A7/%E8%B6%85%E4%BA%BA%E5%89%8D%E4%BC%A0/S01/
+*/
 const PageRegister = () => { 
     
     //react hook-form

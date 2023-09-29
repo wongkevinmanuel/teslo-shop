@@ -8,13 +8,12 @@ import { useForm } from 'react-hook-form';
 
 import { AuthContext } from '../../context';
 import { AuthLayout } from '../../components/layouts'
-import tesloApi from '../../api/tesloApi';
 import { useRouter } from 'next/router';
 
 type FormData = {
-    email: string,
+    email   : string,
     password: string
-}
+};
 
 const LoginPage = () => {
     //transformar objeto al valor boolean con !!error.email
@@ -26,15 +25,14 @@ const LoginPage = () => {
     const { loginUser } = useContext(AuthContext);
     const router = useRouter();
 
-    const onLoginUser = async (dataForm:FormData) =>{
+    const onLoginUser = async ({email, password }:FormData) =>{
         setShowErrorChip(false);
-        //TODO: investigar sobre promises metodos all, then, catch
-        const isValiadLogin = await loginUser(dataForm.email, dataForm.password);
+        const isValiadLogin = await loginUser(email, password);
         
         if(!isValiadLogin){
-            console.log('Error en las credenciales');
             setShowErrorChip(true);
             setTimeout( () => setShowErrorChip(false), 3000 );
+            return;
         }
 
         //TODO: navegar a la pantalla del usuario
@@ -54,7 +52,7 @@ const LoginPage = () => {
                         <Typography variant='h1' component='h1'>Iniciar Sesión</Typography>
                         <Chip 
                             sx={{ display: showErrorChip ? 'flex': 'none'}}
-                            label='No reconocemos ese usuario / password'
+                            label='No reconocemos ese usuario / contraseña'
                             color='error'
                             icon={<ErrorOutline/>}
                             className='fadeIn'></Chip>
@@ -73,11 +71,10 @@ const LoginPage = () => {
                         <TextField label='Contraseña' type='password' variant='filled' fullWidth
                         {...register('password',{
                             required: 'Este campo es requerido',
-                            minLength: { value: 6 , message:'Minimo 6 caracteres.'}
+                            minLength: { value: 6 , message:'Mínimo 6 caracteres.'}
                         })}
                         error={ !!errors.password}
-                        helperText={errors.password?.message}
-                        ></TextField>
+                        helperText={errors.password?.message}></TextField>
                     </Grid>
 
                     <Grid item xs={12}>
