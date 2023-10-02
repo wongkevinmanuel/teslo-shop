@@ -20,7 +20,6 @@ const LoginPage = () => {
     //!!errors.email
     //TODO: Arreglar validation de email no funciona con validate: validations.isEmail
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
-    //console.log({errors});
     
     const { loginUser } = useContext(AuthContext);
     const router = useRouter();
@@ -35,10 +34,8 @@ const LoginPage = () => {
             return;
         }
 
-        //TODO: navegar a la pantalla del usuario
         const destination = router.query.p?.toString() || '/';
         router.replace(destination);
-
     }
     
     const [showErrorChip,setShowErrorChip] = useState(false); 
@@ -87,7 +84,7 @@ const LoginPage = () => {
                         </Button>
                     </Grid>
                     <Grid item xs={12} display='flex' justifyContent='end'>
-                        <Link href='/auth/register' component={NextLink} underline='always'>
+                        <Link href={router.query.p ?` /auth/register?p=${router.query.p}` : '/auth/register'} component={NextLink} underline='always'>
                             No tienes cuenta?
                         </Link>
                     </Grid>

@@ -7,9 +7,7 @@ import { Box, Button, Grid, TextField, Typography, Link, Chip } from '@mui/mater
 import { ErrorOutline, ErrorSharp } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 
-import tesloApi from '../../api/tesloApi';
 import { AuthLayout } from '../../components/layouts';
-import { validations } from '../../util';
 import { useRouter } from 'next/router';
 import { AuthContext } from '../../context';
 
@@ -41,8 +39,9 @@ const PageRegister = () => {
             setTimeout(() => establecerMensajeError(false), 3000);
             return;
         }
-        router.replace('/');
- 
+
+        const destination = router.query.p?.toString() || '/';
+        router.replace(destination);
     }
 
     return (
@@ -98,7 +97,7 @@ const PageRegister = () => {
                                 </Button>
                             </Grid>
                             <Grid item xs={12} display='flex' justifyContent='end'>
-                                <Link href='/auth/login' component={NextLink} underline='always'>
+                                <Link href={router.query.p ?` /auth/login?p=${router.query.p}` : '/auth/login'} component={NextLink} underline='always'>
                                     Ya tienes cuenta?
                                 </Link>
                             </Grid>
