@@ -17,10 +17,10 @@ switch (action.type) {
      case 'Auth-logout':
         return {
             ...state,
-            user: undefined,
-            isLoggedIn: false
+            isLoggedIn: false,
+            user: undefined
         }
-
+      
     default:
       return state;
   }

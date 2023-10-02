@@ -4,6 +4,7 @@ import { IUser } from '../../interfaces';
 import tesloApi from '../../api/tesloApi';
 import Cookies from 'js-cookie';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 //Estado de la informacion que se maneja
 export interface AuthState{
@@ -49,11 +50,22 @@ export const AuthProvider:FC<Props> = ({children}) => {
             Cookies.set('token', token);
 
             dispatch({type: 'Auth-login', payload: user});
-
+            
             return true;
         }catch(error){
             return false;
         }
+    }
+    
+    const router = useRouter();
+
+    const onLogOut = ()=>{
+        Cookies.remove('user');
+        Cookies.remove('cart');
+        Cookies.remove('token');
+        //refresh app = perder el estado app
+        router.reload();
+        //dispatch({type: 'Auth-logout'});
     }
     
                                                     //tipo de retorno en linea
@@ -87,7 +99,8 @@ export const AuthProvider:FC<Props> = ({children}) => {
                     ...state,
                     //Method
                     loginUser,
-                    registerUser
+                    onLogOut,
+                    registerUser,
             }}>
                 {children}
         </AuthContext.Provider>

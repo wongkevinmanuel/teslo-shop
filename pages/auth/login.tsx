@@ -36,7 +36,8 @@ const LoginPage = () => {
         }
 
         //TODO: navegar a la pantalla del usuario
-        router.replace('/');
+        const destination = router.query.p?.toString() || '/';
+        router.replace(destination);
 
     }
     
