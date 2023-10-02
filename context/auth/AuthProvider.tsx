@@ -27,9 +27,9 @@ export const AuthProvider:FC<Props> = ({children}) => {
     useEffect(()=> { checkToken() }, [])
 
     const checkToken = async ()=> {
-        //llamar al endpoint
-        //grabar en cookies y revalidar en token, guardar nuevo en cookies
-        //dispatch accion de login
+        if (!Cookies.get('token'))
+            return;
+        
         try{
             const { data} = await tesloApi.get('/user/validatetoken');
             const { token, user } = data;
