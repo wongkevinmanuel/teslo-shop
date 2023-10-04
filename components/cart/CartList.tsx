@@ -6,8 +6,6 @@ import { ItemCounter } from '../ui';
 import CartContext from '../../context/cart/CartContext';
 import { ICartProduct } from '../../interfaces';
 
-
-
 interface Props{
     editable ?: boolean;
     children ?: React.ReactNode

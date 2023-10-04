@@ -6,7 +6,6 @@ import Cookie from 'js-cookie';
 
 export interface CartState{
     cart: ICartProduct[],
-
     numberOfItems: number,
     subTotal: number,
     tax: number,
@@ -15,10 +14,10 @@ export interface CartState{
 
 const Cart_ESTADO_INICIAL: CartState = {
     cart: [],
-    numberOfItems: 0,
-    subTotal: 0,
-    tax: 0,
-    total:0
+    numberOfItems: 0.0 ,
+    subTotal: 0.0 ,
+    tax: 0.0 ,
+    total: 0.0 ,
 }
 
 interface Props{
@@ -57,7 +56,7 @@ const CartProvider:FC<Props> = ({children}) => {
             //total de items
             const numberOfItems = state.cart.reduce( (previo, actual) => actual.quantity + previo, 0 );
             const subTotal = state.cart.reduce( (previo, actual) => (actual.price * actual.quantity) + previo, 0 );
-            const taxRate = Number(process.env.NEXT_PUBLIC_TAX_RATE|| 0);
+            const taxRate = Number(process.env.NEXT_PUBLIC_TAX_RATE || 0);
 
             const orderSummary = {
                 numberOfItems,
@@ -119,8 +118,8 @@ const CartProvider:FC<Props> = ({children}) => {
                 //Methos
                 addProductToCart,
                 updateCartQuantity,
-                removeCartProduct 
-            }}>
+                removeCartProduct, }}>
+
                 {children}
         </CartContext.Provider>
      )
