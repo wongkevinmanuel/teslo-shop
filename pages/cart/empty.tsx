@@ -1,8 +1,8 @@
 import React from 'react'
+import NextLink from 'next/link';
 import { ShopLayout } from '../../components/layouts';
 import { Box, Link, Typography } from '@mui/material';
 import { RemoveShoppingCartOutlined } from '@mui/icons-material';
-import NextLink from 'next/link';
 
 const EmptyPage = () => {
   return (
@@ -12,8 +12,8 @@ const EmptyPage = () => {
         justifyContent='center'
         alignItems='center'
         height='calc(100vh - 200px)'
-        sx={{ flexDirection: { xs:'column', sm: 'row'}}}
-        >
+        sx={{ flexDirection: { xs:'column', sm: 'row'}}}>
+          
             <RemoveShoppingCartOutlined sx={{fontSize: 100}}></RemoveShoppingCartOutlined>
             <Box display='flex' flexDirection='column' alignItems='center'>
                 <Typography>

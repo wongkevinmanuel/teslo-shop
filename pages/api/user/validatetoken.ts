@@ -1,9 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { db } from '../../../database';
 import User from '../../../models/User';
-import bcrypt from 'bcryptjs';
 import { jwt } from '../../../util';
-import { isValidToken } from '../../../util/jwt';
 
 type Data = {
     message: string

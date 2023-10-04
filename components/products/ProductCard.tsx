@@ -26,9 +26,9 @@ export const ProductCard:FC<Props> = ({product}) => {
   }, [isHovered, product.images])
 
   //METODOS PARA CARGAR TEXTOS Y 
-  // IMAGENES AL TIEMPO, NO SUPER MONTADO
+  //IMAGENES AL TIEMPO, NO SUPER MONTADO
   const[isImageLoaded, setIsImageLoaded] = useState(false);
-
+  /*  desactivar el prefetch de next */
   return (
           <Grid item xs={6} 
           sm={4}
@@ -36,7 +36,6 @@ export const ProductCard:FC<Props> = ({product}) => {
           onMouseLeave={()=> {setIsHovered(false)}}>
 
             <Card>
-                                                           {/*  desactivar el prefetch de next */}
               <Link component={NextLink} href={`/products/${product.slug}`} prefetch={false}>
                 <CardActionArea>
                   {
@@ -45,7 +44,7 @@ export const ProductCard:FC<Props> = ({product}) => {
                       color='primary' label='No disponibles'
                       sx={{position:'absolute', zIndex: 99, top:'10px',left: '10px'}}></Chip>
                       )
-                    }
+                  }
                   
                   <CardMedia
                     className='fadeIn'

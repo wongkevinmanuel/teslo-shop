@@ -1,8 +1,10 @@
 import {FC, useReducer,ReactNode,useEffect} from 'react';
+import Cookie from 'js-cookie';
+
 import { ICartProduct } from '../../interfaces';
+
 import CartContext from './CartContext';
 import { cartReducer } from './cartReducer';
-import Cookie from 'js-cookie';
 
 export interface CartState{
     cart: ICartProduct[],

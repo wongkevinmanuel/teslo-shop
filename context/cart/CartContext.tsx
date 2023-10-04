@@ -2,14 +2,11 @@ import {createContext} from 'react';
 import { ICartProduct } from '../../interfaces';
 
 interface ContextProps {
-    cart: ICartProduct[],
-
-    numberOfItems: number,
-    subTotal: number,
-    tax: number,
-    total: number
-    //numberOfItems: number,
-    //subTotal: number,
+    cart: ICartProduct[];
+    numberOfItems: number;
+    subTotal: number;
+    tax: number;
+    total: number;
 
     //Metodos
     addProductToCart: (product: ICartProduct) => void;

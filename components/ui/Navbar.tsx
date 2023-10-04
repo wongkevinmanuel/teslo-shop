@@ -1,10 +1,11 @@
 // para el pre frest de la otra pantalla
-import { useContext, useState } from 'react';
 import React from 'react'
+import { useContext, useState } from 'react';
 import NextLink from 'next/link';
 
 import {Link, AppBar, Toolbar, Typography, Box, Button, IconButton, Badge, Input, InputAdornment} from '@mui/material'
 import { ClearOutlined, SearchOutlined, ShoppingCartOutlined} from '@mui/icons-material';
+
 import { useRouter } from 'next/router';
 import { UiContext } from "../../context";
 import CartContext from '../../context/cart/CartContext';
@@ -58,9 +59,7 @@ export const Navbar = () => {
                     </Link>
             </Box>
             <Box flex={1} />
-
             {/* Patallas grandes */}
-
             {
                 /* Si esta permitiendo ver la busqueda*/
                 isSearchVisible
@@ -94,8 +93,6 @@ export const Navbar = () => {
                     </IconButton>
                 )
             }
-            
-
             {/* Patallas pequenas */}
             <IconButton
              sx={{display: {xs:'flex', sm:'none'} }}
@@ -109,7 +106,6 @@ export const Navbar = () => {
                             <ShoppingCartOutlined />
                         </Badge>
                     </IconButton>
-                    
                 </Link>
             <Button onClick={openSideMenu}>
                 Menú

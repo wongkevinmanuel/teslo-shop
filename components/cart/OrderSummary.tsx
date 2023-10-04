@@ -1,5 +1,6 @@
-import { Grid, Typography } from '@mui/material'
 import React, { useContext } from 'react'
+import { Grid, Typography } from '@mui/material'
+
 import CartContext from '../../context/cart/CartContext';
 import { currency } from '../../util';
 
@@ -35,7 +36,6 @@ export const OrderSummary = () => {
         <Grid item xs={6} display='flex' justifyContent='end'>
             <Typography variant='subtitle1'> {currency.format(total)} </Typography>
         </Grid>
-
 
     </Grid>
   )

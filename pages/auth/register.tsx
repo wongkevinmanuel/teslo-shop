@@ -2,13 +2,14 @@ import React from 'react'
 import { useState } from 'react';
 
 import {useContext} from 'react';
+import { useRouter } from 'next/router';
 import NextLink from 'next/link';
+
 import { Box, Button, Grid, TextField, Typography, Link, Chip } from '@mui/material';
 import { ErrorOutline, ErrorSharp } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 
 import { AuthLayout } from '../../components/layouts';
-import { useRouter } from 'next/router';
 import { AuthContext } from '../../context';
 
 type FormData = {
@@ -16,9 +17,7 @@ type FormData = {
     email : string;
     password : string;
 };
-/*
-https://om.chirmyram.com/tlv2/%E7%BE%8E%E5%89%A7/%E8%B6%85%E4%BA%BA%E5%89%8D%E4%BC%A0/S01/
-*/
+
 const PageRegister = () => { 
     
     //react hook-form

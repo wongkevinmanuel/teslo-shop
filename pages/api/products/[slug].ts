@@ -18,7 +18,6 @@ export default function hanlder (req: NextApiRequest, res: NextApiResponse<Data>
         default:
             return res.status(400).json({menssage:'BAD REQUEST'});
     }
-
 }
 
 const getProductBySlug = async(req: NextApiRequest, res: NextApiResponse<Data>) => {

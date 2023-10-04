@@ -1,17 +1,17 @@
-
 import React, {FC, useContext} from 'react' 
-import { CardActionArea, CardMedia, Grid, Typography, Link, Box, Button } from '@mui/material'
 import NextLink from 'next/link';
+import { CardActionArea, CardMedia, Grid, Typography, Link, Box, Button } from '@mui/material'
+
 import { ItemCounter } from '../ui';
 import CartContext from '../../context/cart/CartContext';
 import { ICartProduct } from '../../interfaces';
 
 interface Props{
-    editable ?: boolean;
-    children ?: React.ReactNode
+    editable?: boolean;
+    children?: React.ReactNode
 }
 
-/*TODO: updatedQuantity agregar el metodo del compoenete <ItemCounter></ItemCounter> */
+/*TODO: updatedQuantity agregar el metodo del componente <ItemCounter></ItemCounter> */
 export const CartList:FC<Props> = ({editable = false}) => {
     const {cart} = useContext(CartContext);
     const {updateCartQuantity } = useContext(CartContext);
@@ -25,18 +25,18 @@ export const CartList:FC<Props> = ({editable = false}) => {
 
     return (
     <>
-    {
-        cart.map(
+        {
+            cart.map(
             product => (
                <Grid container spacing={2} key={product.slug + product.size } sx={{ mb:1}}>
                 <Grid item xs={3}>
-                    {/* TODO: llevar a la pagina del producto */}
+
                     <Link href={`/products/${product.slug}`} component={NextLink}>
                         <CardActionArea>
                             <CardMedia
                             image={`/products/${product.image}`}
                             component='img'
-                            sx={{borderRadius:'5px'}}></CardMedia>
+                            sx={{borderRadius:'5px'}}/>
                         </CardActionArea>
                     </Link>
                 </Grid>
@@ -70,8 +70,9 @@ export const CartList:FC<Props> = ({editable = false}) => {
                     }
                 </Grid>
                </Grid>
+                )
             )
-        )
-    }</>
+        }
+    </>
   )
 }

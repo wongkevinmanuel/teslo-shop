@@ -6,18 +6,20 @@ import NextLink from 'next/link';
 import { CreditCardOffOutlined, CreditScoreOutlined } from '@mui/icons-material';
 
 const OrderPage = () => {
-  return (
-    <ShopLayout title={'Remusen de orden #0001'} pageDiscription={'Remusen de orden'}>
-        <Typography variant='h1' component='h1'>
-            Orden: ABC0001
-        </Typography>
-
-        {/* <Chip sx={{my: 2}}
+  {/* <Chip sx={{my: 2}}
         label="Pendiente de pago"
         variant='outlined'
         color='error'
         icon={<CreditCardOffOutlined></CreditCardOffOutlined>}></Chip>
         */}
+    return (
+    <ShopLayout title={'Remusen de orden #0001'} pageDiscription={'Remusen de orden'}>
+        <Typography variant='h1' component='h1'>
+            Orden: ABC0001
+        </Typography>
+
+        
+
         <Chip sx={{my: 2}}
         label="Pagada"
         variant='outlined'

@@ -1,10 +1,11 @@
 import {FC, useReducer,ReactNode, useEffect} from 'react';
+import { useRouter } from 'next/router';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+
 import { AuthContext, authReducer } from './';
 import { IUser } from '../../interfaces';
 import tesloApi from '../../api/tesloApi';
-import Cookies from 'js-cookie';
-import axios from 'axios';
-import { useRouter } from 'next/router';
 
 //Estado de la informacion que se maneja
 export interface AuthState{
@@ -41,8 +42,7 @@ export const AuthProvider:FC<Props> = ({children}) => {
         }
     }
 
-
-    //return un Promise<boolean>, retorna una promesa que resuelve un boolean
+    //devuelve una Promise<boolean>, retorna una promesa que resuelve un boolean
     const loginUser = async (email:string, password: string): Promise<boolean> =>{
         try{
             const {data} = await tesloApi.post('/user/login', {email, password});

@@ -5,7 +5,8 @@ import { CartState } from './'
 type CartActionType = 
 | {type: 'Cart-load-from-cookies', payload: ICartProduct[]}
 | {type: 'Cart-update-products' , payload: ICartProduct[] }
-  //regresa todo el ICartProduct = nuevo producto con nueva cantidad
+  
+//regresa todo el ICartProduct = nuevo producto con nueva cantidad
 | {type: 'Cart-update-quantity-products' , payload: ICartProduct }
 | {type: 'Cart-remove-products' , payload: ICartProduct }
 | {type: 'Cart-update-order-summary' , 
@@ -26,7 +27,7 @@ switch (action.type) {
       return {
         ...state,
         cart: [...action.payload],
-     }
+    }
      
     case 'Cart-update-products':
       return {

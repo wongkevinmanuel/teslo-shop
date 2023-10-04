@@ -110,8 +110,7 @@ const ProductPage:FC<Props> = ({product}) => {
                          onSelectedSize={ (size) => selectedSize(size)}
                          />
                     </Box>
-                    {/* onSelectedSize={ selectedSize(size)} */}
-                    {/*Agregar al carrito */}
+                    
                     {
                         (product.inStock > 0 )? (
                             <Button color="secondary" 
@@ -129,7 +128,7 @@ const ProductPage:FC<Props> = ({product}) => {
                             ></Chip>
                         )
                     }
-                    {/*Descripcion */}
+                    
                     <Box sx={{ mt: 3}}>
                         <Typography variant='subtitle2'> Descripcion</Typography>
                         <Typography variant='body2'> {product.description}</Typography>
