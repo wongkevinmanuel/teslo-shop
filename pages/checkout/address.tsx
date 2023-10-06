@@ -1,6 +1,8 @@
 import React from 'react'
 import { ShopLayout } from '../../components/layouts'
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
+import { GetServerSideProps } from 'next'
+import { jwt } from '../../util'
 
 const address = () => {
   return (
@@ -57,3 +59,33 @@ const address = () => {
 }
 
 export default address;
+
+export const getServerSideProps: GetServerSideProps = async({req}) => {
+    const { token = ''} = req.cookies;
+    let userId = '';
+    let isValidToken = false;
+
+    try{
+        await jwt.isValidToken(token);
+        isValidToken = true;
+    }catch(er){
+        isValidToken = false;
+    }
+
+    if(!isValidToken){
+        return{
+            redirect: {
+                destination: '/auth/login?p=/checkout/address',
+                permanent: false,
+            }
+        }    
+    }
+
+    return {
+        props:{
+            props:{
+
+            }
+        }
+    }
+}

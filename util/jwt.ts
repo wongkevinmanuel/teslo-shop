@@ -25,6 +25,11 @@ export const isValidToken = ( token:string ):Promise<string> => {
         );
     }
 
+    if(token.length <= 10){
+        //promesa rechazada
+        return Promise.reject('JWt no es valido');
+    }
+
     const promesa: Promise<string> = new Promise( (resolve, reject) =>{
         try{
             jwt.verify(token, process.env.JWT_SECRET_SEED || '', 

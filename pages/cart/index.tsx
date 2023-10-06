@@ -7,15 +7,15 @@ import CartContext from '../../context/cart/CartContext'
 import { useRouter } from 'next/router'
 
 const CartPage = () => {
-  const {cart } = useContext(CartContext);
+  const { isLoaded, cart } = useContext(CartContext);
   const  router = useRouter();
 
   useEffect(()=>{
-    if(cart.length === 0)
-        router.replace('/cart/empty')
-  }, [cart, router])
+    if(isLoaded || cart.length === 0)
+        {router.replace('/cart/empty');}
+  }, [ isLoaded, cart, router])
   
-  if(cart.length === 0 )
+  if(!isLoaded)
   {  return (<></>); }
 
     return (
@@ -23,7 +23,7 @@ const CartPage = () => {
         <Typography variant='h1' component='h1'> Carrito </Typography>
         <Grid container>
             <Grid item xs={ 12 } sm={ 7 }>
-                <CartList editable/>   
+                {/* <CartList editable/>  */}  
             </Grid>
             <Grid item xs={ 12 } sm={ 5 }>
                 <Card className='summary-card'>

@@ -26,6 +26,7 @@ switch (action.type) {
     case 'Cart-load-from-cookies':
       return {
         ...state,
+        isLoaded: true,
         cart: [...action.payload],
     }
      
