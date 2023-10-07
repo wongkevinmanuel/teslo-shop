@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import { Grid, Typography } from '@mui/material'
 
 import CartContext from '../../context/cart/CartContext';
-import { currency } from '../../util';
+import { currency } from '../../utils';
 
 export const OrderSummary = () => {
     

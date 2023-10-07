@@ -2,7 +2,7 @@ import React from 'react'
 import { ShopLayout } from '../../components/layouts'
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
 import { GetServerSideProps } from 'next'
-import { jwt } from '../../util'
+import { jwt } from '../../utils'
 
 const address = () => {
   return (
