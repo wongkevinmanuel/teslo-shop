@@ -2,9 +2,14 @@ import React from 'react'
 import { ShopLayout } from '../../components/layouts'
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
 import { GetServerSideProps } from 'next'
-import { jwt } from '../../utils'
+import { countries, jwt } from '../../utils'
 
 const address = () => {
+    type paises = {
+        name: string,
+        code:string
+    }
+    
   return (
     <ShopLayout title='Direccion' pageDiscription='Confirmar direccion de destino' >
         <Typography variant='h1' component='h1'> Direccion </Typography>
@@ -38,10 +43,17 @@ const address = () => {
                     variant='filled'
                     label='Pais'
                     value={1}>
-                        <MenuItem value={1}>Costa Rica</MenuItem>
-                        <MenuItem value={2}>Honduras</MenuItem>
-                        <MenuItem value={3}> El Salavador</MenuItem>
-                        <MenuItem value={4}> Mexico</MenuItem>
+                        {
+                            countries.map(
+                                (c) => (
+                                    <MenuItem 
+                                    value={c.code}
+                                    key={c.code}>
+                                        {c.name}
+                                    </MenuItem>
+                                )
+                            )
+                        }
                     </Select>
                 </FormControl>
             </Grid>
@@ -60,7 +72,13 @@ const address = () => {
 
 export default address;
 
-export const getServerSideProps: GetServerSideProps = async({req}) => {
+//Verificar del lado servidor, si esta autenticado
+//de lo contrario no mostrar pagina
+//metodo con next inferior version 12
+//Se ejecuta siempre que el cliente haga request
+//primero funcion y despues renderiza componente
+/* export const getServerSideProps: GetServerSideProps = async({req}) => {
+    
     const { token = ''} = req.cookies;
     let userId = '';
     let isValidToken = false;
@@ -88,4 +106,4 @@ export const getServerSideProps: GetServerSideProps = async({req}) => {
             }
         }
     }
-}
+} */
