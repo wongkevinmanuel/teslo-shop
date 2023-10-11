@@ -1,40 +1,79 @@
 import React from 'react'
-import { ShopLayout } from '../../components/layouts'
-import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
 import { GetServerSideProps } from 'next'
+
+import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
+
+import { ShopLayout } from '../../components/layouts'
 import { countries, jwt } from '../../utils'
+import { useForm } from 'react-hook-form'
+
+type FormData = {
+    firstName: string,
+    lastName: string,
+    address: string,
+    address2: string,
+    zip: string,
+    city: string,
+    country: string,
+    phone: string
+}
 
 const address = () => {
-    type paises = {
-        name: string,
-        code:string
+    //registrar react form
+    const {register, handleSubmit, formState: {errors} } = useForm<FormData>();
+
+    const onClickRevisarPedido = ( {
+        firstName,
+        lastName,
+        address,
+        address2,
+        zip,
+        city,
+        country,
+        phone}:FormData ) => {
+
+            console.log('Click en el boton revisar pedido')
     }
-    
-  return (
+
+
+    return (
     <ShopLayout title='Direccion' pageDiscription='Confirmar direccion de destino' >
         <Typography variant='h1' component='h1'> Direccion </Typography>
 
+        <form onSubmit={handleSubmit( onClickRevisarPedido)}>
         <Grid container spacing={2} sx={{ mt:2}}>
             {/* xs = pantallas muy pequenas sm= pantallas no tan pequenas */}
             <Grid item xs={12} sm={6}>
-                <TextField label='Nombre' variant='filled' fullWidth />
+                <TextField label='Nombre' variant='filled' fullWidth 
+                {...register('firstName',{required: 'El primer nombre es requerido'
+                }) }/>
             </Grid>
             <Grid item xs={12} sm={6}>
-                <TextField label='Apellido' variant='filled' fullWidth />
-            </Grid>
-            
-            <Grid item xs={12} sm={6}>
-                <TextField label='Direccion' variant='filled' fullWidth />
-            </Grid>
-            <Grid item xs={12} sm={6}>
-                <TextField label='Direccion 2' variant='filled' fullWidth />
+                <TextField label='Apellido' variant='filled' fullWidth 
+                 {...register('lastName',{required: 'El apellido es requerido'
+                }) }/>
             </Grid>
             
             <Grid item xs={12} sm={6}>
-                <TextField label='Codigo postal' variant='filled' fullWidth />
+                <TextField label='Direccion' variant='filled' fullWidth 
+                {...register('address',{required: 'La direccion es requerido'
+                }) }/>
             </Grid>
             <Grid item xs={12} sm={6}>
-                <TextField label='Ciudad' variant='filled' fullWidth />
+                <TextField label='Direccion 2' variant='filled' fullWidth 
+                {...register('address2',{required: 'Direccion es requerido'
+                }) }/>
+            </Grid>
+            
+            <Grid item xs={12} sm={6}>
+                <TextField label='Codigo postal' variant='filled' fullWidth 
+                {...register('zip',{required: 'El codigo postal es requerido'
+                }) }/>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                <TextField label='Ciudad' variant='filled' fullWidth 
+                {...register('city',{required: 'La ciudad es requerido'
+                }) }/>
             </Grid>
             
             <Grid item xs={12} sm={6}>
@@ -42,7 +81,7 @@ const address = () => {
                     <Select
                     variant='filled'
                     label='Pais'
-                    value={1}>
+                    value={'CRI'}>
                         {
                             countries.map(
                                 (c) => (
@@ -58,14 +97,18 @@ const address = () => {
                 </FormControl>
             </Grid>
             <Grid item xs={12} sm={6}>
-                <TextField label='Telefono' variant='filled' fullWidth />
+                <TextField label='Telefono' variant='filled' fullWidth 
+                {...register('phone',{required: 'El telefono es requerido'
+                }) }/>
             </Grid>
         </Grid>
         <Box sx={{mt: 5}} display='flex' justifyContent='center'>
-            <Button color='secondary' className='circular-btn' size='large'>
+            <Button color='secondary' className='circular-btn' size='large'
+            type='submit'>
                 Revisar pedido
             </Button>
         </Box>
+        </form>
     </ShopLayout>
   )
 }
