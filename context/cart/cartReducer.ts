@@ -10,7 +10,9 @@ type CartActionType =
 | {type: 'Cart-remove-products' , payload: ICartProduct }
 //Address
 | {type: 'Address-load-from-cookies' , payload: ShippingAddress }
-| {type: 'Cart-update-order-summary' , 
+| {type: 'Address-update' , payload: ShippingAddress }
+| 
+{type: 'Cart-update-order-summary' , 
   payload: {
     numberOfItems: number;
     subTotal: number;
@@ -69,7 +71,8 @@ switch (action.type) {
           return {
             ...state,
             ...action.payload
-        }
+          }
+        case 'Address-update':
         case 'Address-load-from-cookies':
           return {
             ...state,

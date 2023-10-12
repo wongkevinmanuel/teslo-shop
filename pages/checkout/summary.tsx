@@ -1,9 +1,11 @@
 import React, { useContext } from 'react'
-import { ShopLayout } from '../../components/layouts'
-import { Box, Button, Card, CardContent, Divider, Grid, Link, Typography } from '@mui/material'
-import { CartList, OrderSummary } from '../../components/cart'
 import NextLink from 'next/link';
+
+import { Box, Button, Card, CardContent, Divider, Grid, Link, Typography } from '@mui/material'
+
 import CartContext from '../../context/cart/CartContext';
+import { ShopLayout } from '../../components/layouts'
+import { CartList, OrderSummary } from '../../components/cart'
 import { countries } from '../../utils';
 
 const SummaryPage = () => {
@@ -13,7 +15,7 @@ const SummaryPage = () => {
         return <></>;
     }
 
-    const {firstName, lastName, address, address2, city, zip, country, phone } = shippingAddress;
+    const {firstName, lastName, address, address2='', city, zip, country, phone } = shippingAddress;
 
   return (
     <ShopLayout title={'Remusen de orden'} pageDiscription={'Remusen de orden'}>
@@ -33,7 +35,7 @@ const SummaryPage = () => {
                         <Divider sx={{ my:1 }} />
                         {/* Order Summary */}
                         <Box display='flex' justifyContent='space-between'>
-                            <Typography variant='subtitle1'>Direccion de Entrega
+                            <Typography variant='subtitle1'>Dirección de Entrega
                             </Typography>
                             <Link href='/checkout/address' component={NextLink} underline='always'>
                                 Editar
@@ -50,7 +52,7 @@ const SummaryPage = () => {
                             {city} , Código postal:  {zip}
                         </Typography>
                         <Typography>
-                           Pais: { countries.find( (c) => c.code === country )?.name }
+                           País: { countries.find( (c) => c.code === country )?.name }
                         </Typography>
                         <Typography>
                            Telf: {phone}

@@ -51,7 +51,8 @@ const address = () => {
     );
 
     const router = useRouter();
-    //const {updateAddress} = useContext(CartContext);
+    //TODO:
+    const {updateAddress} = useContext(CartContext);
 
     const onSubmitRevisarPedido = ( {
         firstName,
@@ -72,12 +73,22 @@ const address = () => {
             Cookies.set('country',country);
             Cookies.set('phone',phone);
 
-            //updateAddress(data);
-
+            const d = {'firstName':firstName,
+            'lastName':lastName,
+            'address':address,
+            'address2':address2,
+            'zip':zip,
+            'city':city,
+            'country':country,
+            'phone':phone};
+ 
+            updateAddress(d);
             router.push('/checkout/summary');
+            
         }
 
-
+        //TODO: Arreglar: Establecer el valor del campo pais TextField 
+        //de las cookies. defaultValue={ Cookies.get('country') || countries[0].code }
     return (
     <ShopLayout title='Dirección' pageDiscription='Confirmar dirección del destino' >
         <form onSubmit={handleSubmit( onSubmitRevisarPedido)}>
