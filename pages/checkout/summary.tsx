@@ -1,10 +1,20 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { ShopLayout } from '../../components/layouts'
 import { Box, Button, Card, CardContent, Divider, Grid, Link, Typography } from '@mui/material'
 import { CartList, OrderSummary } from '../../components/cart'
 import NextLink from 'next/link';
+import CartContext from '../../context/cart/CartContext';
+import { countries } from '../../utils';
 
 const SummaryPage = () => {
+    const { shippingAddress, numberOfItems} = useContext(CartContext);
+    // Si es null shippingAddress
+    if(!shippingAddress){
+        return <></>;
+    }
+
+    const {firstName, lastName, address, address2, city, zip, country, phone } = shippingAddress;
+
   return (
     <ShopLayout title={'Remusen de orden'} pageDiscription={'Remusen de orden'}>
         <Typography variant='h1' component='h1'>
@@ -18,7 +28,7 @@ const SummaryPage = () => {
                 <Card className='summary-card'>
                     <CardContent>
                         <Typography variant='h2'>
-                            Resumen 3 productos
+                            Resumen ({numberOfItems} {numberOfItems === 1 ? 'producto':'productos' } )
                         </Typography>
                         <Divider sx={{ my:1 }} />
                         {/* Order Summary */}
@@ -31,19 +41,19 @@ const SummaryPage = () => {
                         </Box>
 
                         <Typography >
-                            Kevin Onofre
+                            {firstName} { lastName }
                         </Typography>
                         <Typography>
-                            303 Edificio - 12 de Octubre y 10 primera
+                            {address} {address2 ? `, ${address2} ` : ''}
                         </Typography>
                         <Typography>
-                            Quevedo, Centro 10305
+                            {city} , Código postal:  {zip}
                         </Typography>
                         <Typography>
-                            Ecuador
+                           Pais: { countries.find( (c) => c.code === country )?.name }
                         </Typography>
                         <Typography>
-                            +1 0941629388
+                           Telf: {phone}
                         </Typography>
                         
                         <Divider sx={{ my:1 }} />

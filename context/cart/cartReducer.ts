@@ -1,14 +1,15 @@
 import { ICartProduct } from '../../interfaces';
-import { CartState } from './'
+import { CartState, ShippingAddress } from './'
 
 //nombre accion y q dato espera
 type CartActionType = 
 | {type: 'Cart-load-from-cookies', payload: ICartProduct[]}
 | {type: 'Cart-update-products' , payload: ICartProduct[] }
-  
 //regresa todo el ICartProduct = nuevo producto con nueva cantidad
 | {type: 'Cart-update-quantity-products' , payload: ICartProduct }
 | {type: 'Cart-remove-products' , payload: ICartProduct }
+//Address
+| {type: 'Address-load-from-cookies' , payload: ShippingAddress }
 | {type: 'Cart-update-order-summary' , 
   payload: {
     numberOfItems: number;
@@ -68,6 +69,11 @@ switch (action.type) {
           return {
             ...state,
             ...action.payload
+        }
+        case 'Address-load-from-cookies':
+          return {
+            ...state,
+            shippingAddress : action.payload
           }
 
     default:

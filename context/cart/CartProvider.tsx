@@ -13,6 +13,20 @@ export interface CartState{
     subTotal: number,
     tax: number,
     total: number
+
+    shippingAddress?: ShippingAddress;
+}
+
+//ADDRESS
+export interface ShippingAddress{
+    firstName: string,
+    lastName: string,
+    address: string,
+    address2: string,
+    zip: string,
+    city: string,
+    country: string,
+    phone: string
 }
 
 const Cart_ESTADO_INICIAL: CartState = {
@@ -22,6 +36,7 @@ const Cart_ESTADO_INICIAL: CartState = {
     subTotal: 0.0 ,
     tax: 0.0 ,
     total: 0.0 ,
+    shippingAddress: undefined
 }
 
 interface Props{
@@ -44,7 +59,26 @@ const CartProvider:FC<Props> = ({children}) => {
         }
     }, [])
     
+    //Cargar Address en context
+    useEffect(() => {
+       if(Cookie.get('firstName')){
+        //Leer datos de la cookies y recargar el reducer = address
+        const shippingAddress = {
+            firstName:  Cookie.get('firstName')   || '',
+            lastName:   Cookie.get('lastName')    || '',
+            address:    Cookie.get('address')     || '',
+            address2:   Cookie.get('address2')    || '',
+            zip:        Cookie.get('zip')         || '',
+            city:       Cookie.get('city')        || '',
+            country:    Cookie.get('country')     || '',
+            phone:      Cookie.get('phone',  )     || '', 
+           };
+           dispatch({type:'Address-load-from-cookies', payload: shippingAddress});
+       }
+    }, [])
     
+
+
     //Se dispara cuando los productos cambian en el carrito compras
     //Cuando cambie el state.cart se dispara funcion
     //de guardar el carrito de compras en la cookie
