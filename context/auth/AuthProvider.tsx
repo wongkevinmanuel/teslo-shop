@@ -63,9 +63,20 @@ export const AuthProvider:FC<Props> = ({children}) => {
         Cookies.remove('user');
         Cookies.remove('cart');
         Cookies.remove('token');
+        
+        Cookies.remove('firstName');
+        Cookies.remove('lastName');
+        Cookies.remove('address');
+        Cookies.remove('address2');
+        Cookies.remove('zip');
+        Cookies.remove('city');
+        Cookies.remove('country');
+        Cookies.remove('phone');
+    
         //refresh app = perder el estado app
         router.reload();
-        //dispatch({type: 'Auth-logout'});
+        
+        
     }
     
                                                     //tipo de retorno en linea
