@@ -9,9 +9,12 @@ import CartProvider from '../context/cart/CartProvider';
 
 import { SessionProvider } from "next-auth/react"
 
-function MyApp({Component, pageProps}:AppProps ){
+function MyApp({ Component, pageProps}:AppProps ){
+    //SessionProvider todo depende de la autenticacion
+    //todos los componentes pueden leer la info
+    //de la session
     return (
-    <SessionProvider>    
+    <SessionProvider>
         <SWRConfig
             value={{
             fetcher: (resource, init) => fetch(resource, init).then(res => res.json())}}>
