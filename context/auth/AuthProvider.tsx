@@ -7,6 +7,8 @@ import { AuthContext, authReducer } from './';
 import { IUser } from '../../interfaces';
 import tesloApi from '../../api/tesloApi';
 
+import { useSession, signIn, signOut } from "next-auth/react"
+
 //Estado de la informacion que se maneja
 export interface AuthState{
     isLoggedIn: boolean;
@@ -23,7 +25,19 @@ interface Props{
 }
 
 export const AuthProvider:FC<Props> = ({children}) => {
+    //Session
+    const {data: session, status } = useSession();
+    //console.log(session?.user);
+
+    //Autenticacion basada en nextAuth
+    useEffect(()=> {
+        if( status === 'authenticated'){
+            console.log(session?.user);
+        }
+    }, [status, session ])
+
     const [state, dispatch] = useReducer(authReducer, AUTH_ESTADO_INICIAL);
+    
     //Se dispara una unica vez/ no dependencias
     //para 
     useEffect(()=> { checkToken() }, [])
