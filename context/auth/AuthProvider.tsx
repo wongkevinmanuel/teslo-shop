@@ -25,14 +25,15 @@ interface Props{
 }
 
 export const AuthProvider:FC<Props> = ({children}) => {
+    
     //Session
     const {data: session, status } = useSession();
-    //console.log(session?.user);
-
+    
     //Autenticacion basada en nextAuth
     useEffect(()=> {
         if( status === 'authenticated'){
             console.log(session?.user);
+            //TODO: dispatch ({type: 'Auth-login', payload: data?.user as IUser});
         }
     }, [status, session ])
 
@@ -40,23 +41,23 @@ export const AuthProvider:FC<Props> = ({children}) => {
     
     //Se dispara una unica vez/ no dependencias
     //para 
-    useEffect(()=> { checkToken() }, [])
+    //useEffect(()=> { checkToken() }, [])
 
-    const checkToken = async ()=> {
-        if (!Cookies.get('token'))
-            return;
-        
-        try{
-            const { data} = await tesloApi.get('/user/validatetoken');
-            const { token, user } = data;
-            Cookies.set('token', token);
-            dispatch({type: 'Auth-login', payload: user});
-        }catch(error){
-            Cookies.remove('token');
-        }
-    }
+    //const checkToken = async ()=> {
+    //    if (!Cookies.get('token'))
+    //        return;
+    //try{
+    //        const { data} = await tesloApi.get('/user/validatetoken');
+    //        const { token, user } = data;
+    //        Cookies.set('token', token);
+    //        dispatch({type: 'Auth-login', payload: user});
+    //   }catch(error){
+    //        Cookies.remove('token');
+    //    }
+    //}
 
     //devuelve una Promise<boolean>, retorna una promesa que resuelve un boolean
+    
     const loginUser = async (email:string, password: string): Promise<boolean> =>{
         try{
             const {data} = await tesloApi.post('/user/login', {email, password});
