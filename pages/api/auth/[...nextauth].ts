@@ -19,7 +19,6 @@ export  const authOptions = {
 
       async authorize(credentials, req){
         console.log({credentials});
-        //return {name:'Clavel', correo: 'claveldejesus@hotmail.com', role:'client'}
         return await dbUsers.checkUser(credentials!.email,credentials!.password);
       }
     }),
@@ -33,7 +32,6 @@ export  const authOptions = {
   callbacks:{
     //Cuando se genera un json web token
     async jwt({token, account, user}){
-      //console.log({token, user, account});
       //Conserve el token de acceso de OAuth o 
       //la identificación de usuario en el token 
       //justo después de iniciar sesión
@@ -53,9 +51,9 @@ export  const authOptions = {
 
       return token;
     },
-    //Cuando se cree una session
+    //Cuando se cree una session del token
     async session({session, token, user}){
-      //console.log({session, token, user});
+      //Del token se lee el usuario y se establece en la session
       session.accessToken = token.accessToken;
       session.user = token.user as any;
 

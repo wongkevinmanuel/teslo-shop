@@ -33,7 +33,7 @@ export const AuthProvider:FC<Props> = ({children}) => {
     useEffect(()=> {
         if( status === 'authenticated'){
             console.log(session?.user);
-            //TODO: dispatch ({type: 'Auth-login', payload: data?.user as IUser});
+            dispatch ({type: 'Auth-login', payload: session?.user as IUser});
         }
     }, [status, session ])
 
@@ -77,8 +77,7 @@ export const AuthProvider:FC<Props> = ({children}) => {
     const onLogOut = ()=>{
         Cookies.remove('user');
         Cookies.remove('cart');
-        Cookies.remove('token');
-        
+        //Direccion del usuario
         Cookies.remove('firstName');
         Cookies.remove('lastName');
         Cookies.remove('address');
@@ -87,9 +86,11 @@ export const AuthProvider:FC<Props> = ({children}) => {
         Cookies.remove('city');
         Cookies.remove('country');
         Cookies.remove('phone');
-    
+        
+        signOut();
         //refresh app = perder el estado app
-        router.reload();
+        //router.reload();
+        //Cookies.remove('token');
         
         
     }

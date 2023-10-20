@@ -3,7 +3,7 @@ import User from '../models/User';
 import { db } from './';
 import bcrypt from 'bcryptjs';
 
-export const checkUser = async(email: string, password:string ) => {
+export const checkUser = async(email: string = '', password:string = '') => {
     
     await db.connect();
     const user = await User.findOne({ email });
