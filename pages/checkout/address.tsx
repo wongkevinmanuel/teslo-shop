@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, TextField, Typography } from '@mui/material'
 import Cookies from 'js-cookie'
@@ -34,7 +34,7 @@ const getAddressFromCookies = (): FormData =>{
 
 const address = () => {
     //registrar react form
-    const {register, handleSubmit, formState: {errors} } = useForm<FormData>(
+    const {register, handleSubmit, formState: {errors},  reset } = useForm<FormData>(
         {
             defaultValues: getAddressFromCookies()
             /*defaultValues:{
@@ -49,6 +49,12 @@ const address = () => {
             }*/
         }
     );
+    
+    //El servidor no lo renderiza hasta que el cliente
+    //lo haga, hay lo carga
+    useEffect(()=>{
+        reset(getAddressFromCookies() );
+    }, [reset])
 
     const router = useRouter();
     //TODO:
@@ -147,30 +153,15 @@ const address = () => {
             </Grid>
             
             <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                    <TextField
-                    select
+                <TextField
                     variant='filled'
                     label='País'
-                    defaultValue={ countries[0].code }
                     {...register('country',{
                         required: 'El país es requerido'
                     })}
                     error={!!errors.country}
-                    >
-                        {
-                            countries.map(
-                                (c) => (
-                                    <MenuItem 
-                                    value={c.code}
-                                    key={c.code}>
-                                        {c.name}
-                                    </MenuItem>
-                                )
-                            )
-                        }
-                    </TextField>
-                </FormControl>
+                    helperText={errors.country?.message}
+                    />
             </Grid>
             <Grid item xs={12} sm={6}>
                 <TextField label='Teléfono' variant='filled' fullWidth 

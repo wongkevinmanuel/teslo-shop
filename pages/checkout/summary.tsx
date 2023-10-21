@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import NextLink from 'next/link';
 
 import { Box, Button, Card, CardContent, Divider, Grid, Link, Typography } from '@mui/material'
@@ -7,15 +7,27 @@ import CartContext from '../../context/cart/CartContext';
 import { ShopLayout } from '../../components/layouts'
 import { CartList, OrderSummary } from '../../components/cart'
 import { countries } from '../../utils';
+import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
 const SummaryPage = () => {
-    const { shippingAddress, numberOfItems} = useContext(CartContext);
-    // Si es null shippingAddress
-    if(!shippingAddress){
-        return <></>;
+const { shippingAddress, numberOfItems} = useContext(CartContext);
+
+//Siempre debe tener direccion
+const router = useRouter();
+useEffect(()=> {
+    if( !Cookies.get('firstName') ){
+        router.push('/checkout/address');
     }
 
-    const {firstName, lastName, address, address2='', city, zip, country, phone } = shippingAddress;
+}, [router]);
+
+// Si es null shippingAddress
+if(!shippingAddress){
+    return <></>;
+}
+
+const {firstName, lastName, address, address2='', city, zip, country, phone } = shippingAddress;
 
   return (
     <ShopLayout title={'Remusen de orden'} pageDiscription={'Remusen de orden'}>
@@ -52,7 +64,7 @@ const SummaryPage = () => {
                             {city} , Código postal:  {zip}
                         </Typography>
                         <Typography>
-                           País: { countries.find( (c) => c.code === country )?.name }
+                           País: { country }
                         </Typography>
                         <Typography>
                            Telf: {phone}
