@@ -1,14 +1,16 @@
-import React,{ useState } from 'react'
-import { useContext } from 'react'
+import React,{ useEffect, useState } from 'react'
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import { signIn } from 'next-auth/react' 
+import { getServerSession } from "next-auth/next" 
+import { getProviders } from "next-auth/react"
 
-import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material'
+
+import { Box, Button, Chip, Divider, Grid, Link, TextField, Typography } from '@mui/material'
 import { ErrorOutline } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 
-import { AuthContext } from '../../context';
 import { AuthLayout } from '../../components/layouts'
-import { useRouter } from 'next/router';
 
 type FormData = {
     email   : string,
@@ -21,24 +23,22 @@ const LoginPage = () => {
     //TODO: Arreglar validation de email no funciona con validate: validations.isEmail
     const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
     
-    const { loginUser } = useContext(AuthContext);
     const router = useRouter();
 
     const onLoginUser = async ({email, password }:FormData) =>{
         setShowErrorChip(false);
-        const isValiadLogin = await loginUser(email, password);
-        
-        if(!isValiadLogin){
-            setShowErrorChip(true);
-            setTimeout( () => setShowErrorChip(false), 3000 );
-            return;
-        }
-
-        const destination = router.query.p?.toString() || '/';
-        router.replace(destination);
+        await signIn('credentials',{email , password});
     }
-    
     const [showErrorChip,setShowErrorChip] = useState(false); 
+    const [providers, setProviders] = useState<any> ({});
+
+    useEffect(() => {
+      getProviders().then(prov => {
+        console.log({prov})
+        setProviders(prov);
+      })
+    }, [])
+    
 
     return (
     <AuthLayout title='Ingresar'>
@@ -88,12 +88,64 @@ const LoginPage = () => {
                             No tienes cuenta?
                         </Link>
                     </Grid>
+
+                    <Grid item xs={12} display='flex' flexDirection='column' justifyContent='end'>
+                        <Divider sx={{width:'100%', mb: 2 }} />
+                        {
+                            Object.values(providers).map(
+                                (provider: any) => {
+                                    if(provider.id === 'credentials')
+                                        return (<div key='credentials'></div>)
+
+                                    return (
+                                        <Button
+                                        key={provider.id}
+                                        variant='outlined'
+                                        fullWidth
+                                        color='primary'
+                                        sx={{mb: 1}}
+                                        onClick={ () => signIn(provider.id)}
+                                        >{provider.name}</Button>
+                                    )
+                                }
+                            )
+                        }
+                    </Grid>
                 </Grid>
             </Box>
         </form>
     </AuthLayout>
   )
 }
+
+//No se carga la pagina si existe session de lado usuario
+//Porque toda la informacion esta en cookies
+//cuando se realiza el request al login 
+//ya se tiene informacion si esta authenticado o no por la cookies
+// You should use getServerSideProps when:
+// - Only if you need to pre-render a page whose data must be fetched at request time
+
+import { GetServerSideProps } from 'next'
+import { authOptions } from '../api/auth/[...nextauth]';
+
+export const getServerSideProps: GetServerSideProps = async ({req, res, query}) => {
+    const session = await getServerSession(req, res, authOptions)
+    const {p='/'} = query
+
+    if(session){
+        return {
+            redirect:{
+                destination: p.toString(),
+                permanent: false
+            }
+        }
+    }
+
+    return {
+        props: { }
+    }
+}
+
 
 
 export default LoginPage

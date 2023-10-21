@@ -1,5 +1,8 @@
 import React from 'react'
 import { useState } from 'react';
+import { signIn } from "next-auth/react"
+import { getServerSession } from "next-auth/next" 
+
 
 import {useContext} from 'react';
 import { useRouter } from 'next/router';
@@ -39,8 +42,9 @@ const PageRegister = () => {
             return;
         }
 
-        const destination = router.query.p?.toString() || '/';
-        router.replace(destination);
+        //const destination = router.query.p?.toString() || '/';
+        //router.replace(destination);
+        await signIn('credentials', { email, password });
     }
 
     return (
@@ -105,6 +109,27 @@ const PageRegister = () => {
                 </form>
             </AuthLayout>
     )
+}
+
+import { GetServerSideProps } from 'next'
+import { authOptions } from '../api/auth/[...nextauth]';
+
+export const getServerSideProps: GetServerSideProps = async ({req, res, query}) => {
+    const session = await getServerSession(req, res, authOptions)
+    const {p='/'} = query
+
+    if(session){
+        return {
+            redirect:{
+                destination: p.toString(),
+                permanent: false
+            }
+        }
+    }
+
+    return {
+        props: { }
+    }
 }
 
 export default PageRegister;

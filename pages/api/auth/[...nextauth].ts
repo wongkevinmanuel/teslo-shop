@@ -28,6 +28,16 @@ export  const authOptions = {
       clientSecret: process.env.GITHUB_SECRET ,
     }),
   ],
+  
+  pages:{
+    signIn: '/auth/login',   
+    newUser: '/auth/register'
+  },
+  
+  session:{
+    maxAge: 2592000, //30dias
+    updateAge: 86400, //cada
+  },
 
   callbacks:{
     //Cuando se genera un json web token
