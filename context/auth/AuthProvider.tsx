@@ -32,7 +32,7 @@ export const AuthProvider:FC<Props> = ({children}) => {
     //Autenticacion basada en nextAuth
     useEffect(()=> {
         if( status === 'authenticated'){
-            console.log(session?.user);
+            //console.log(session?.user);
             dispatch ({type: 'Auth-login', payload: session?.user as IUser});
         }
     }, [status, session ])
@@ -41,20 +41,7 @@ export const AuthProvider:FC<Props> = ({children}) => {
     
     //Se dispara una unica vez/ no dependencias
     //para 
-    //useEffect(()=> { checkToken() }, [])
-
-    //const checkToken = async ()=> {
-    //    if (!Cookies.get('token'))
-    //        return;
-    //try{
-    //        const { data} = await tesloApi.get('/user/validatetoken');
-    //        const { token, user } = data;
-    //        Cookies.set('token', token);
-    //        dispatch({type: 'Auth-login', payload: user});
-    //   }catch(error){
-    //        Cookies.remove('token');
-    //    }
-    //}
+    //useEffect(()=> { metodo() }, [])
 
     //devuelve una Promise<boolean>, retorna una promesa que resuelve un boolean
     
