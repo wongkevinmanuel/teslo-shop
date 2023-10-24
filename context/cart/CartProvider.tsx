@@ -5,6 +5,7 @@ import { ICartProduct } from '../../interfaces';
 
 import CartContext from './CartContext';
 import { cartReducer } from './cartReducer'; 
+import tesloApi from '../../api/tesloApi';
 
 export interface CartState{
     isLoaded: boolean,
@@ -164,6 +165,14 @@ const CartProvider:FC<Props> = ({children}) => {
         dispatch({type:'Address-update', payload: address});
     }
 
+    
+    const createOrder = async () => {
+        enviarOrden();
+        if(orden === null){
+
+        }
+    }
+
     return (
         <CartContext.Provider value={{
                 ...state,
@@ -171,10 +180,33 @@ const CartProvider:FC<Props> = ({children}) => {
                 addProductToCart,
                 updateCartQuantity,
                 removeCartProduct, 
-                updateAddress }}>
+                updateAddress,
+                
+                //Orders
+                createOrder,
+                }}>
 
                 {children}
         </CartContext.Provider>
      )
 }
+
+let orden:any;
+
+async function enviarOrden(): Promise<void> {
+    
+    try{
+        const { data } = await tesloApi.post('/orders')
+        orden = data;
+        console.log(orden);
+
+    }catch(error){
+        console.log(error);
+    
+    }finally{
+
+        return;
+    }
+}
+
 export default CartProvider;

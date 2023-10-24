@@ -11,7 +11,7 @@ import { useRouter } from 'next/router';
 import Cookies from 'js-cookie';
 
 const SummaryPage = () => {
-const { shippingAddress, numberOfItems} = useContext(CartContext);
+const { shippingAddress, numberOfItems, createOrder} = useContext(CartContext);
 
 //Siempre debe tener direccion
 const router = useRouter();
@@ -21,6 +21,11 @@ useEffect(()=> {
     }
 
 }, [router]);
+
+const onCreateOrder = () => {
+    createOrder();
+}
+
 
 // Si es null shippingAddress
 if(!shippingAddress){
@@ -81,7 +86,8 @@ const {firstName, lastName, address, address2='', city, zip, country, phone } = 
                         <OrderSummary/>
 
                         <Box sx={{ mt:3 }}>
-                            <Button color='secondary' className='circular-btn' fullWidth>
+                            <Button color='secondary' className='circular-btn' fullWidth
+                            onClick={onCreateOrder}>
                                 Confirmar Orden
                             </Button>
                         </Box>
