@@ -196,7 +196,7 @@ let orden:any;
 async function enviarOrden(): Promise<void> {
     
     try{
-        const { data } = await tesloApi.post('/orders')
+        const { data } = await tesloApi.post('/orders');
         orden = data;
         console.log(orden);
 
