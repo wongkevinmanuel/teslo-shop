@@ -1,7 +1,7 @@
 import {FC, useReducer,ReactNode,useEffect} from 'react';
 import Cookie from 'js-cookie';
 
-import { ICartProduct } from '../../interfaces';
+import { ICartProduct, IOrder } from '../../interfaces';
 
 import CartContext from './CartContext';
 import { cartReducer } from './cartReducer'; 
@@ -78,8 +78,6 @@ const CartProvider:FC<Props> = ({children}) => {
        }
     }, [])
     
-
-
     //Se dispara cuando los productos cambian en el carrito compras
     //Cuando cambie el state.cart se dispara funcion
     //de guardar el carrito de compras en la cookie
@@ -167,10 +165,29 @@ const CartProvider:FC<Props> = ({children}) => {
 
     
     const createOrder = async () => {
-        enviarOrden();
-        if(orden === null){
-
+        if(!state.shippingAddress){
+            throw new Error('No hay direccion de entrega');
         }
+
+        //Size en carrito es opcional.
+        //Type 'ISize | undefined' is not assignable to type 'ISize'.
+        //Se exparse las proiedades y se modifica la
+        //necesaria
+        const body: IOrder = {
+            orderItems: state.cart.map(p=> ({
+                ...p,
+                size: p.size! })
+            ),
+
+            shippingAddress: state.shippingAddress,
+            numberOfItems: state.numberOfItems,
+
+            subTotal: state.subTotal,
+            tax: state.tax,
+            total: state.total,
+            isPaid: false
+        }
+        enviarOrden(body);
     }
 
     return (
@@ -191,21 +208,14 @@ const CartProvider:FC<Props> = ({children}) => {
      )
 }
 
-let orden:any;
+let orden:any = null;
 
-async function enviarOrden(): Promise<void> {
-    
+ const enviarOrden = async (body:IOrder): Promise<void> =>{
     try{
-        const { data } = await tesloApi.post('/orders');
-        orden = data;
-        console.log(orden);
-
+        const { data } = await tesloApi.post('/orders',body);
+        return;
     }catch(error){
         console.log(error);
-    
-    }finally{
-
-        return;
     }
 }
 
