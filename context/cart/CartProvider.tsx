@@ -6,6 +6,7 @@ import { ICartProduct, IOrder } from '../../interfaces';
 import CartContext from './CartContext';
 import { cartReducer } from './cartReducer'; 
 import tesloApi from '../../api/tesloApi';
+import axios from 'axios';
 
 export interface CartState{
     isLoaded: boolean,
@@ -163,7 +164,7 @@ const CartProvider:FC<Props> = ({children}) => {
         dispatch({type:'Address-update', payload: address});
     }
 
-    const createOrder = async () => {
+    const createOrder = async (): Promise<{hasError: boolean, message: string }> => {
         if(!state.shippingAddress){
             throw new Error('No hay direccion de entrega');
         }
@@ -186,7 +187,27 @@ const CartProvider:FC<Props> = ({children}) => {
             total: state.total,
             isPaid: false
         }
-        enviarOrden(body);
+
+        try{
+            const { data } = await tesloApi.post<IOrder>('/orders',body);
+            //TODO: Dispatch
+
+            return {
+                hasError: false,
+                message: data._id!
+            }
+        }catch(error){
+            if(axios.isAxiosError(error)){
+                return{
+                    hasError: true,
+                    message: error.response?.data.message
+                }
+            }
+            return{
+                hasError: true,
+                message: 'Error no controlado, llamar al administrador.'
+            }
+        }
     }
 
     return (
@@ -205,17 +226,6 @@ const CartProvider:FC<Props> = ({children}) => {
                 {children}
         </CartContext.Provider>
      )
-}
-
-let orden:any = null;
-
- const enviarOrden = async (body:IOrder): Promise<void> =>{
-    try{
-        const { data } = await tesloApi.post('/orders',body);
-        return;
-    }catch(error){
-        console.log(error);
-    }
 }
 
 export default CartProvider;

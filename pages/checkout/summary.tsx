@@ -1,17 +1,20 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
+import { useRouter } from 'next/router';
 import NextLink from 'next/link';
+import Cookies from 'js-cookie';
 
-import { Box, Button, Card, CardContent, Divider, Grid, Link, Typography } from '@mui/material'
+import { Box, Button, Card, CardContent, Chip, Divider, Grid, Link, Typography } from '@mui/material'
 
 import CartContext from '../../context/cart/CartContext';
 import { ShopLayout } from '../../components/layouts'
 import { CartList, OrderSummary } from '../../components/cart'
-import { countries } from '../../utils';
-import { useRouter } from 'next/router';
-import Cookies from 'js-cookie';
+//import { countries } from '../../utils';
 
 const SummaryPage = () => {
 const { shippingAddress, numberOfItems, createOrder} = useContext(CartContext);
+
+const [isPosting, setIsPosting] = useState(false);
+const [errorMessage, setErrorMessage] = useState('');
 
 //Siempre debe tener direccion
 const router = useRouter();
@@ -23,7 +26,8 @@ useEffect(()=> {
 }, [router]);
 
 const onCreateOrder = () => {
-    createOrder();
+    setIsPosting(true);
+    createOrder(); //todo:
 }
 
 // Si es null shippingAddress
@@ -84,11 +88,18 @@ const {firstName, lastName, address, address2='', city, zip, country, phone } = 
 
                         <OrderSummary/>
 
-                        <Box sx={{ mt:3 }}>
+                        <Box sx={{ mt:3 }} display='flex' flexDirection='column'>
                             <Button color='secondary' className='circular-btn' fullWidth
-                            onClick={onCreateOrder}>
+                            onClick={onCreateOrder}
+                            disabled = {isPosting}>
                                 Confirmar Orden
                             </Button>
+                            <Chip 
+                                color='error'
+                                label={errorMessage}
+                                sx={{display: errorMessage ? 'flex': 'none', mt: 2}} 
+                            />  
+                            
                         </Box>
                     </CardContent>
                 </Card>
