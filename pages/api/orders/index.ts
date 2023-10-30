@@ -4,11 +4,11 @@ import { IOrder } from '../../../interfaces';
 import { getServerSession } from 'next-auth/next';
 import { authOptions } from '../../api/auth/[...nextauth]';
 import { db } from '../../../database';
-import { Product } from '../../../models';
+import { Product, Order } from '../../../models';
 
-type Data = {
-    menssage: string
-}
+type Data = 
+        | { menssage: string} 
+        | IOrder;
 
 export default function (req: NextApiRequest, res: NextApiResponse<Data>) {
     
@@ -42,7 +42,9 @@ const createOrder = async (request: NextApiRequest, response: NextApiResponse<Da
     try{
 
         const subTotal = orderItems.reduce( (prev, current) => {
-            const currentPrice = dbProducts.find( prod => prod._id === current._id )?.price;
+            //prod.id es el id propio del producto
+            const currentPrice = dbProducts.find( prod => prod.id === current._id )?.price;
+            
             if(! currentPrice){
                 throw new Error('Verfique el carrito de nuevo, producto no existe.');
             }
@@ -56,8 +58,19 @@ const createOrder = async (request: NextApiRequest, response: NextApiResponse<Da
         if (total !== backendTotal){
             throw new Error('El total no cuadra con el monto');
         }
-    }catch(error){
 
+        const userId = session.user._id;
+        const newOrder = new Order({...request.body, isPaid: false, user: userId});
+        await newOrder.save();
+        console.log(newOrder);
+        return response.status(201).json(newOrder);
+
+    }catch(error:any){
+        await db.disconnect();
+        console.log(error);
+        response.status(400).json({
+            menssage: error.message  || 'Revisar log del servidor'
+        });
     }
 
     return response.status(201).json(request.body);

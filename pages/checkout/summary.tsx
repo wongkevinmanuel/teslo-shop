@@ -26,7 +26,6 @@ const onCreateOrder = () => {
     createOrder();
 }
 
-
 // Si es null shippingAddress
 if(!shippingAddress){
     return <></>;
