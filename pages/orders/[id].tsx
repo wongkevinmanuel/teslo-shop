@@ -17,73 +17,75 @@ interface Props{
     order: IOrder;
 }
 
-const OrderPage: NextPage<Props> = (props) => {
-    console.log(props.order);
-  {/* <Chip sx={{my: 2}}
-        label="Pendiente de pago"
-        variant='outlined'
-        color='error'
-        icon={<CreditCardOffOutlined></CreditCardOffOutlined>}></Chip>
-        */}
+const OrderPage: NextPage<Props> = ({order}) => {
+  console.log(order);
+  const {shippingAddress} = order;
+  
     return (
-    <ShopLayout title={'Remusen de orden #0001'} pageDiscription={'Remusen de orden'}>
+    <ShopLayout title={'Remusen de la orden'} pageDiscription={'Remusen de orden'}>
         <Typography variant='h1' component='h1'>
-            Orden: ABC0001
+            Orden: {order._id}
         </Typography>
-
+        {
+            order.isPaid ? (
+                <Chip sx={{my: 2}}
+                label="Orden ya fue pagada"
+                variant='outlined'
+                color='success'
+                icon={<CreditScoreOutlined/>}></Chip>
+            ): (
+                <Chip sx={{my: 2}}
+                label="Pendiente de pago"
+                variant='outlined'
+                color='error'
+                icon={<CreditScoreOutlined/>}></Chip>
+            )
+        }
         
-
-        <Chip sx={{my: 2}}
-        label="Pagada"
-        variant='outlined'
-        color='success'
-        icon={<CreditScoreOutlined></CreditScoreOutlined>}></Chip>
 
         <Grid container>
             <Grid item xs={ 12 } sm={ 7 }>
-                <CartList editable={false}></CartList>   
+                <CartList editable={false} products={order.orderItems}>
+                </CartList>   
             </Grid>
             <Grid item xs={ 12 } sm={ 5 }>
                 <Card className='summary-card'>
                     <CardContent>
                         <Typography variant='h2'>
-                            Resumen 3 productos
+                            Resumen ({ order.numberOfItems <= 1 ? ('producto'):(`${order.numberOfItems} productos`) })
                         </Typography>
                         <Divider sx={{ my:1 }} />
                         {/* Order Summary */}
                         <Box display='flex' justifyContent='space-between'>
                             <Typography variant='subtitle1'>Direccion de Entrega
                             </Typography>
-                            <Link href='/checkout/address' component={NextLink} underline='always'>
-                                Editar
-                            </Link>
                         </Box>
 
                         <Typography >
-                            Kevin Onofre
+                            Nombre: {shippingAddress.firstName} {shippingAddress.lastName}
                         </Typography>
                         <Typography>
-                            303 Edificio - 12 de Octubre y 10 primera
+                            Dirección: {shippingAddress.address} { shippingAddress.address2 ? `,${shippingAddress.address2}`: ''}
                         </Typography>
                         <Typography>
-                            Quevedo, Centro 10305
+                            Ciudad: {shippingAddress.city} , Código posta: {shippingAddress.zip}
                         </Typography>
                         <Typography>
-                            Ecuador
+                            País: {shippingAddress.country}
                         </Typography>
                         <Typography>
-                            +1 0941629388
+                            Celular: {shippingAddress.phone}
                         </Typography>
                         
                         <Divider sx={{ my:1 }} />
 
-                        <Box display='flex' justifyContent='end'>
-                            <Link href='/cart' component={NextLink} underline='always'>
-                                Editar
-                            </Link>
-                        </Box>
-
-                        <OrderSummary/>
+                        <OrderSummary  orderSummaryData={ {
+                                        numberOfItems: order.numberOfItems, 
+                                        subTotal: order.subTotal,
+                                        tax: order.tax ,
+                                        total: order.total} 
+                                    }
+                        />
 
                         <Box sx={{ mt:3 }}>
                            <h1>Pagar</h1>
@@ -104,9 +106,10 @@ const OrderPage: NextPage<Props> = (props) => {
 }
 
 // Renderizado del lado del servido
-
 export const getServerSideProps: GetServerSideProps = async ({req, res, query}) => {
     const { id = '' } = query;
+    console.log(id);
+
     const session = await getServerSession(req, res, authOptions);
     
     //No hay session
@@ -120,7 +123,6 @@ export const getServerSideProps: GetServerSideProps = async ({req, res, query}) 
     }
     
     const order = await dbOrders.getOrderById(id.toString());
-    
     //No hay orden
     if(!order){
         return{
@@ -141,10 +143,10 @@ export const getServerSideProps: GetServerSideProps = async ({req, res, query}) 
         }
 
     }
-
+    
     return {
         props: {
-            Order
+            order
         }
     }
 }

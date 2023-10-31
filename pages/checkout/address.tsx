@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { Box, Button, FormControl, Grid, InputLabel, MenuItem, TextField, Typography } from '@mui/material'
+import { Box, Button, FormControl, Grid, InputLabel, Link, MenuItem, TextField, Typography } from '@mui/material'
 import Cookies from 'js-cookie'
 import { useForm } from 'react-hook-form'
 
@@ -142,6 +142,12 @@ const address = () => {
                 error={!!errors.zip}
                 helperText={errors.zip?.message}
                 />
+                
+                <Box display='flex' justifyContent='end'>
+                    <Link href='https://www.codigopostal.gob.ec/#'>
+                        Código postal
+                    </Link>
+                </Box>
             </Grid>
             <Grid item xs={12} sm={6}>
                 <TextField label='Ciudad' variant='filled' fullWidth 

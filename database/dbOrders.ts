@@ -15,5 +15,6 @@ export const getOrderById = async (id: string): Promise< IOrder | null> => {
         return null;
     }
 
+    //Informacion con serializacion
     return JSON.parse(JSON.stringify(order));
 }

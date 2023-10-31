@@ -4,15 +4,16 @@ import { CardActionArea, CardMedia, Grid, Typography, Link, Box, Button } from '
 
 import { ItemCounter } from '../ui';
 import CartContext from '../../context/cart/CartContext';
-import { ICartProduct } from '../../interfaces';
+import { ICartProduct, IOrderItem } from '../../interfaces';
 
 interface Props{
     editable?: boolean;
-    children?: React.ReactNode
+    children?: React.ReactNode;
+    products: IOrderItem[];
 }
 
 /*TODO: updatedQuantity agregar el metodo del componente <ItemCounter></ItemCounter> */
-export const CartList:FC<Props> = ({editable = false}) => {
+export const CartList:FC<Props> = ({editable = false, products= []}) => {
     
     
     const {cart} = useContext(CartContext);
@@ -26,10 +27,12 @@ export const CartList:FC<Props> = ({editable = false}) => {
         updateCartQuantity(product);
     }
     
+    const productsToShow = products ? products : cart;
+
     return (
     <>
         {
-            cart.map(
+            productsToShow.map(
             product => (
                <Grid container spacing={2} key={product.slug + product.size } sx={{ mb:1}}>
                 <Grid item xs={3}>
@@ -52,7 +55,7 @@ export const CartList:FC<Props> = ({editable = false}) => {
                             (
                                 <ItemCounter currentValue={product.quantity} 
                                     maxValue={10} 
-                                    updatedQuantity={ (newValue)=> onNewCartQuantityValue(product, newValue) } />
+                                    updatedQuantity={ (newValue)=> onNewCartQuantityValue(product as  ICartProduct, newValue) } />
                             ) 
                             :
                             (
@@ -69,7 +72,7 @@ export const CartList:FC<Props> = ({editable = false}) => {
                     {
                         editable && (
                             <Button variant='text' color='secondary'
-                            onClick={() => removeCartProduct(product)}>
+                            onClick={() => removeCartProduct(product as  ICartProduct)}>
                                 Remover
                             </Button>
                         )
