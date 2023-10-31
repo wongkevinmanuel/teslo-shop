@@ -4,8 +4,21 @@ import { Box, Button, Card, CardContent, Chip, Divider, Grid, Link, Typography }
 import { CartList, OrderSummary } from '../../components/cart'
 import NextLink from 'next/link';
 import { CreditCardOffOutlined, CreditScoreOutlined } from '@mui/icons-material';
+import { getServerSession } from "next-auth/next" 
 
-const OrderPage = () => {
+import { GetServerSideProps, NextPage } from 'next'
+import { authOptions } from '../api/auth/[...nextauth]';
+import { dbOrders } from '../../database';
+import Order from '../../models/Order';
+import { IOrder } from '../../interfaces';
+
+
+interface Props{
+    order: IOrder;
+}
+
+const OrderPage: NextPage<Props> = (props) => {
+    console.log(props.order);
   {/* <Chip sx={{my: 2}}
         label="Pendiente de pago"
         variant='outlined'
@@ -88,6 +101,52 @@ const OrderPage = () => {
         </Grid>
     </ShopLayout>
   )
+}
+
+// Renderizado del lado del servido
+
+export const getServerSideProps: GetServerSideProps = async ({req, res, query}) => {
+    const { id = '' } = query;
+    const session = await getServerSession(req, res, authOptions);
+    
+    //No hay session
+    if(!session){
+        return{
+            redirect: {
+                destination: `/auth/login?p=/orders/${id}`,
+                permanent: false,
+            }
+        }
+    }
+    
+    const order = await dbOrders.getOrderById(id.toString());
+    
+    //No hay orden
+    if(!order){
+        return{
+            redirect: {
+                destination: `/orders/history`,
+                permanent: false,
+            }
+        }
+    }
+
+    //usuario quiere ver orden de otra persona
+    if( order.user !== session.user._id){
+        return{
+            redirect:{
+                destination: '/orders/history',
+                permanent: false,
+            }
+        }
+
+    }
+
+    return {
+        props: {
+            Order
+        }
+    }
 }
 
 export default OrderPage;

@@ -18,7 +18,9 @@ type CartActionType =
     subTotal: number;
     tax: number;
     total: number
-  }};
+  }}
+| {type: 'Cart-Order-complete'}
+;
 
 //1. En el reducer no ejecutar codigo de terceros.
 //2. No ejecutar un codigo, que salga del alcancce de la funcion.
@@ -77,6 +79,15 @@ switch (action.type) {
           return {
             ...state,
             shippingAddress : action.payload
+          }
+        case 'Cart-Order-complete':
+          return{
+            ...state,
+            cart: [],
+            numberOfItems: 0,
+            subTotal: 0,
+            tax: 0,
+            total: 0
           }
 
     default:

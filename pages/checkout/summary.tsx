@@ -25,9 +25,17 @@ useEffect(()=> {
 
 }, [router]);
 
-const onCreateOrder = () => {
+const onCreateOrder = async () => {
     setIsPosting(true);
-    createOrder(); //todo:
+    const { hasError, message } = await createOrder();
+
+    if(hasError){
+        setIsPosting(false);
+        setErrorMessage(message);
+        return;
+    }
+    //No se regresa esta pagina
+    router.replace(`/orders/${message}`);
 }
 
 // Si es null shippingAddress
