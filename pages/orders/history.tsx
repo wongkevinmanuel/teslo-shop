@@ -53,4 +53,29 @@ const rows = [
     </ShopLayout>
   )
 }
+
+// You should use getServerSideProps when:
+// - Only if you need to pre-render a page whose data must be fetched at request time
+import { GetServerSideProps } from 'next'
+import { getServerSession } from 'next-auth';
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const session:any = await getServerSession(ctx.req);
+
+    if(!session){
+        return {
+            props: {
+                redirect:'/auth/login?p=/orders/history',
+                permanet: false
+            }
+        }
+    }
+    return {
+        props: {
+            id: session.user._id
+        }
+    }
+}
+
+
 export default HistoryPage

@@ -87,13 +87,20 @@ const OrderPage: NextPage<Props> = ({order}) => {
                                     }
                         />
 
-                        <Box sx={{ mt:3 }}>
-                           <h1>Pagar</h1>
-                           <Chip sx={{my: 2}}
+                        <Box sx={{ mt:3 }}
+                            display='flex' flexDirection='column'                            >
+                           
+                           !order.isPaid
+                           ? (
+                               <Chip sx={{my: 2}}
                                 label="Pagada"
                                 variant='outlined'
                                 color='success'
                                 icon={<CreditScoreOutlined></CreditScoreOutlined>}></Chip>
+
+                           ):(
+                               <h1>Pagar</h1>
+                           )
 
                         </Box>
                     </CardContent>
