@@ -3,7 +3,9 @@ import { ShopLayout } from '../../components/layouts'
 import { Box, Button, Card, CardContent, Chip, Divider, Grid, Link, Typography } from '@mui/material'
 import { CartList, OrderSummary } from '../../components/cart'
 import NextLink from 'next/link';
-import { CreditCardOffOutlined, CreditScoreOutlined } from '@mui/icons-material';
+import { CreditCardOffOutlined, CreditScoreOutlined,  } from '@mui/icons-material';
+import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
+
 import { getServerSession } from "next-auth/next" 
 
 import { GetServerSideProps, NextPage } from 'next'
@@ -18,7 +20,6 @@ interface Props{
 }
 
 const OrderPage: NextPage<Props> = ({order}) => {
-  console.log(order);
   const {shippingAddress} = order;
   
     return (
@@ -43,7 +44,7 @@ const OrderPage: NextPage<Props> = ({order}) => {
         }
         
 
-        <Grid container>
+        <Grid container className='fadeIn'>
             <Grid item xs={ 12 } sm={ 7 }>
                 <CartList editable={false} products={order.orderItems}>
                 </CartList>   
@@ -52,7 +53,7 @@ const OrderPage: NextPage<Props> = ({order}) => {
                 <Card className='summary-card'>
                     <CardContent>
                         <Typography variant='h2'>
-                            Resumen ({ order.numberOfItems <= 1 ? ('producto'):(`${order.numberOfItems} productos`) })
+                            Resumen de la orden
                         </Typography>
                         <Divider sx={{ my:1 }} />
                         {/* Order Summary */}
@@ -89,8 +90,8 @@ const OrderPage: NextPage<Props> = ({order}) => {
 
                         <Box sx={{ mt:3 }}
                             display='flex' flexDirection='column'                            >
-                           
-                           !order.isPaid
+                        {   
+                           order.isPaid
                            ? (
                                <Chip sx={{my: 2}}
                                 label="Pagada"
@@ -98,10 +99,14 @@ const OrderPage: NextPage<Props> = ({order}) => {
                                 color='success'
                                 icon={<CreditScoreOutlined></CreditScoreOutlined>}></Chip>
 
-                           ):(
-                               <h1>Pagar</h1>
+                           ):( 
+                                <Chip sx={{my: 2}}
+                                label="Pagar"
+                                variant='outlined'
+                                color='secondary'
+                                icon={<PaidOutlinedIcon></PaidOutlinedIcon>}></Chip>
                            )
-
+                        }
                         </Box>
                     </CardContent>
                 </Card>
@@ -115,8 +120,6 @@ const OrderPage: NextPage<Props> = ({order}) => {
 // Renderizado del lado del servido
 export const getServerSideProps: GetServerSideProps = async ({req, res, query}) => {
     const { id = '' } = query;
-    console.log(id);
-
     const session = await getServerSession(req, res, authOptions);
     
     //No hay session
