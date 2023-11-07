@@ -59,8 +59,12 @@ const createOrder = async (request: NextApiRequest, response: NextApiResponse<Da
             throw new Error('El total no cuadra con el monto');
         }
 
+
         const userId = session.user._id;
         const newOrder = new Order({...request.body, isPaid: false, user: userId});
+                        //Mantener siempre dos decimales
+        newOrder.total = Math.round(newOrder.total * 100)/100;
+        
         await newOrder.save();
         await db.disconnect();
 

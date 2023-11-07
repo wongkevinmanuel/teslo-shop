@@ -40,6 +40,8 @@ const orderSchema = new Schema( {
     isPaid          : {type: Boolean, required: true, default: false },
     paidAt          : {type: String },
 
+    //Relacion de orden con gestor de pago
+    transactionId   : { type:String } 
 },{
     timestamps: true
 })
