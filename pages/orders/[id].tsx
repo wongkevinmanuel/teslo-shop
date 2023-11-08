@@ -2,7 +2,6 @@ import React from 'react'
 import { ShopLayout } from '../../components/layouts'
 import { Box, Button, Card, CardContent, Chip, Divider, Grid, Link, Typography } from '@mui/material'
 import { CartList, OrderSummary } from '../../components/cart'
-import NextLink from 'next/link';
 import { CreditCardOffOutlined, CreditScoreOutlined,  } from '@mui/icons-material';
 import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
 
@@ -11,8 +10,9 @@ import { getServerSession } from "next-auth/next"
 import { GetServerSideProps, NextPage } from 'next'
 import { authOptions } from '../api/auth/[...nextauth]';
 import { dbOrders } from '../../database';
-import Order from '../../models/Order';
 import { IOrder } from '../../interfaces';
+
+import {  PayPalButtons } from '@paypal/react-paypal-js';
 
 
 interface Props{
@@ -20,8 +20,52 @@ interface Props{
 }
 
 const OrderPage: NextPage<Props> = ({order}) => {
-  const {shippingAddress} = order;
-  
+    
+    const {shippingAddress} = order;
+
+    const createOrder = (data:any)=> {
+        return fetch("/my-server/create-paypal-order", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            //use el parámetro "body" para pasar 
+            //opcionalmente información adicional del 
+            //pedido, como identificadores de productos 
+            //y cantidades
+            
+            body: JSON.stringify({
+                cart: [
+                    {
+                        id: "654a466054fdd0ca67412cd4",
+                        quantity: "2000.19",
+                    },
+                ],
+            }),
+        }).then((response) => response.json())
+          .then((order) => order.id);
+    }
+    
+    const onApprove= (data:any) =>{
+        //El pedido se captura en el servidor.
+        console.log(data);
+        return fetch("/my-server/capture-paypal-order", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            orderID: data.orderID
+          })
+        })
+        .then((response) => response.json())
+        .then((orderData) => {
+              const name = orderData.payer.name.given_name;
+              alert(`Transaction completed by ${name}`);
+        });
+    
+    }
+
     return (
     <ShopLayout title={'Remusen de la orden'} pageDiscription={'Remusen de orden'}>
         <Typography variant='h1' component='h1'>
@@ -100,11 +144,10 @@ const OrderPage: NextPage<Props> = ({order}) => {
                                 icon={<CreditScoreOutlined></CreditScoreOutlined>}></Chip>
 
                            ):( 
-                                <Chip sx={{my: 2}}
-                                label="Pagar"
-                                variant='outlined'
-                                color='secondary'
-                                icon={<PaidOutlinedIcon></PaidOutlinedIcon>}></Chip>
+                                <PayPalButtons
+                                    createOrder={ (data) => createOrder(data) }
+                                    onApprove={ (data) => onApprove(data) }   >
+                                </PayPalButtons>
                            )
                         }
                         </Box>

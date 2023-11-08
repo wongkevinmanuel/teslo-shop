@@ -9,26 +9,30 @@ import CartProvider from '../context/cart/CartProvider';
 
 import { SessionProvider } from "next-auth/react"
 
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
+
 function MyApp({ Component, pageProps}:AppProps ){
     //SessionProvider todo depende de la autenticacion
     //todos los componentes pueden leer la info
     //de la session
     return (
     <SessionProvider>
-        <SWRConfig
-            value={{
-            fetcher: (resource, init) => fetch(resource, init).then(res => res.json())}}>
-            <AuthProvider>
-                <CartProvider>
-                    <UiProvider>
-                        <ThemeProvider theme={lightTheme}>
-                            <CssBaseline />
-                            <Component {...pageProps} />
-                        </ThemeProvider>
-                    </UiProvider>
-                </CartProvider>
-            </AuthProvider>
-        </SWRConfig>
+        <PayPalScriptProvider options={{clientId:process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!}} >
+            <SWRConfig
+                value={{
+                fetcher: (resource, init) => fetch(resource, init).then(res => res.json())}}>
+                <AuthProvider>
+                    <CartProvider>
+                        <UiProvider>
+                            <ThemeProvider theme={lightTheme}>
+                                <CssBaseline />
+                                <Component {...pageProps} />
+                            </ThemeProvider>
+                        </UiProvider>
+                    </CartProvider>
+                </AuthProvider>
+            </SWRConfig>
+        </PayPalScriptProvider>
     </SessionProvider>
     )
 }
