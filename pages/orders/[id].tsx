@@ -1,9 +1,8 @@
 import React from 'react'
 import { ShopLayout } from '../../components/layouts'
-import { Box, Button, Card, CardContent, Chip, Divider, Grid, Link, Typography } from '@mui/material'
+import { Box, Card, CardContent, Chip, Divider, Grid, Link, Typography } from '@mui/material'
 import { CartList, OrderSummary } from '../../components/cart'
-import { CreditCardOffOutlined, CreditScoreOutlined,  } from '@mui/icons-material';
-import PaidOutlinedIcon from '@mui/icons-material/PaidOutlined';
+import { CreditScoreOutlined,  } from '@mui/icons-material';
 
 import { getServerSession } from "next-auth/next" 
 
@@ -14,7 +13,6 @@ import { IOrder } from '../../interfaces';
 
 import {  PayPalButtons } from '@paypal/react-paypal-js';
 
-
 interface Props{
     order: IOrder;
 }
@@ -23,7 +21,7 @@ const OrderPage: NextPage<Props> = ({order}) => {
     
     const {shippingAddress} = order;
 
-    const createOrder = (data:any)=> {
+    const createOrder = async (data:any)=> {
         return fetch("/my-server/create-paypal-order", {
             method: "POST",
             headers: {
@@ -37,8 +35,8 @@ const OrderPage: NextPage<Props> = ({order}) => {
             body: JSON.stringify({
                 cart: [
                     {
-                        id: "654a466054fdd0ca67412cd4",
-                        quantity: "2000.19",
+                        //id: "654a466054fdd0ca67412cd4",
+                        quantity: `${order.total}`,
                     },
                 ],
             }),
@@ -46,7 +44,7 @@ const OrderPage: NextPage<Props> = ({order}) => {
           .then((order) => order.id);
     }
     
-    const onApprove= (data:any) =>{
+    const onApprove =  async (data:any, actions:any) =>{
         //El pedido se captura en el servidor.
         console.log(data);
         return fetch("/my-server/capture-paypal-order", {
@@ -62,7 +60,7 @@ const OrderPage: NextPage<Props> = ({order}) => {
         .then((orderData) => {
               const name = orderData.payer.name.given_name;
               alert(`Transaction completed by ${name}`);
-        });
+        }); 
     
     }
 
@@ -133,7 +131,7 @@ const OrderPage: NextPage<Props> = ({order}) => {
                         />
 
                         <Box sx={{ mt:3 }}
-                            display='flex' flexDirection='column'                            >
+                            display='flex' flexDirection='column'>
                         {   
                            order.isPaid
                            ? (
@@ -146,7 +144,7 @@ const OrderPage: NextPage<Props> = ({order}) => {
                            ):( 
                                 <PayPalButtons
                                     createOrder={ (data) => createOrder(data) }
-                                    onApprove={ (data) => onApprove(data) }   >
+                                    onApprove={ (data, action) => onApprove(data, action) }   >
                                 </PayPalButtons>
                            )
                         }
