@@ -21,45 +21,24 @@ const OrderPage: NextPage<Props> = ({order}) => {
     
     const {shippingAddress} = order;
 
-    const createOrder = async (data:any)=> {
-        return fetch("/my-server/create-paypal-order", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            //use el parámetro "body" para pasar 
-            //opcionalmente información adicional del 
-            //pedido, como identificadores de productos 
-            //y cantidades
-            
-            body: JSON.stringify({
-                cart: [
-                    {
-                        //id: "654a466054fdd0ca67412cd4",
-                        quantity: `${order.total}`,
+    const createOrder = async (data:any, actions:any)=> {
+        return actions.order.create({
+            purchase_units: [
+                {
+                    amount: {
+                        value: "1000"
                     },
-                ],
-            }),
-        }).then((response) => response.json())
-          .then((order) => order.id);
+                },
+            ],
+        });
     }
     
     const onApprove =  async (data:any, actions:any) =>{
         //El pedido se captura en el servidor.
-        console.log(data);
-        return fetch("/my-server/capture-paypal-order", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            orderID: data.orderID
-          })
-        })
-        .then((response) => response.json())
-        .then((orderData) => {
-              const name = orderData.payer.name.given_name;
-              alert(`Transaction completed by ${name}`);
+        return actions.order!.capture().then((details:any)=>{
+            console.log({details});
+            const name = details.payer.name.given_name;
+            alert(`Transaction completed by ${name}`);
         }); 
     
     }
@@ -84,7 +63,6 @@ const OrderPage: NextPage<Props> = ({order}) => {
                 icon={<CreditScoreOutlined/>}></Chip>
             )
         }
-        
 
         <Grid container className='fadeIn'>
             <Grid item xs={ 12 } sm={ 7 }>
@@ -143,7 +121,7 @@ const OrderPage: NextPage<Props> = ({order}) => {
 
                            ):( 
                                 <PayPalButtons
-                                    createOrder={ (data) => createOrder(data) }
+                                    createOrder={ (data,actions) => createOrder(data,actions) }
                                     onApprove={ (data, action) => onApprove(data, action) }   >
                                 </PayPalButtons>
                            )
