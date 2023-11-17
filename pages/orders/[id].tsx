@@ -13,6 +13,17 @@ import { IOrder } from '../../interfaces';
 
 import {  PayPalButtons } from '@paypal/react-paypal-js';
 
+export type OrderResponseBody = {
+    id: string;
+    status: 
+        |  "COMPLETED"
+        | "SAVED"
+        | "APPROVED"
+        | "VOIDED"
+        |"PAYER_ACTION_REQUIRED"
+
+}
+
 interface Props{
     order: IOrder;
 }
@@ -26,7 +37,7 @@ const OrderPage: NextPage<Props> = ({order}) => {
             purchase_units: [
                 {
                     amount: {
-                        value: "1000"
+                        value: `${order.total}`
                     },
                 },
             ],
@@ -38,7 +49,7 @@ const OrderPage: NextPage<Props> = ({order}) => {
         return actions.order!.capture().then((details:any)=>{
             console.log({details});
             const name = details.payer.name.given_name;
-            alert(`Transaction completed by ${name}`);
+            //alert(`Transaction completed by ${name}`);
         }); 
     
     }
