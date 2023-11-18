@@ -6,10 +6,10 @@ import { currency } from '../../utils';
 import { IOrderSummaryData } from '../../interfaces';
 
 interface Props{
-    orderSummaryData: IOrderSummaryData;
+    orderSummaryData?: IOrderSummaryData;
 }
 //{numberOfItems = 0,subTotal = 0, tax=0,total = 0}
-export const OrderSummary:FC<Props> = ( {orderSummaryData} ) => {
+export const OrderSummary:FC<Props> = ( {orderSummaryData } ) => {
 
     const {numberOfItems,
          subTotal,

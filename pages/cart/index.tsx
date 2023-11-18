@@ -8,7 +8,8 @@ import { useRouter } from 'next/router'
 
 const CartPage = () => {
 
-  const { isLoaded, cart } = useContext(CartContext);
+  const { isLoaded, 
+    cart, } = useContext(CartContext);
   const  router = useRouter();
 
   //Evitar carga la pagina si no cuenta con
@@ -27,14 +28,14 @@ const CartPage = () => {
         <Typography variant='h1' component='h1'> Carrito </Typography>
         <Grid container>
             <Grid item xs={ 12 } sm={ 7 }>
-                <CartList editable/>
+                <CartList editable = {true}  />
             </Grid>
             <Grid item xs={ 12 } sm={ 5 }>
                 <Card className='summary-card'>
                     <CardContent>
                         <Typography variant='h2'>Orden</Typography>
                         <Divider sx={{ my:1 }} />
-                        <OrderSummary/>
+                        <OrderSummary />
                         <Box sx={{ mt:3 }}>
                             <Button color='secondary' className='circular-btn' fullWidth 
                             href='/checkout/address'>

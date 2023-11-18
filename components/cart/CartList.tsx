@@ -7,14 +7,14 @@ import CartContext from '../../context/cart/CartContext';
 import { ICartProduct, IOrderItem } from '../../interfaces';
 
 interface Props{
-    editable?: boolean;
     children?: React.ReactNode;
-    products: IOrderItem[];
+    editable?: boolean;
+    products?: IOrderItem[];
 }
 
 /*TODO: updatedQuantity agregar el metodo del componente <ItemCounter></ItemCounter> */
-export const CartList:FC<Props> = ({editable = false, products= []}) => {
-    
+export const CartList:FC<Props> = ({editable = false, products}) => {
+//export const CartList:FC<Props> = ({editable = false, products= []}) => {
     
     const {cart} = useContext(CartContext);
 

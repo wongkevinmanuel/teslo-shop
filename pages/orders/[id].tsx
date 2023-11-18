@@ -1,6 +1,6 @@
-import React from 'react'
+import React,{ useState }  from 'react'
 import { ShopLayout } from '../../components/layouts'
-import { Box, Card, CardContent, Chip, Divider, Grid, Link, Typography } from '@mui/material'
+import { Box, Card, CardContent, Chip, CircularProgress, Divider, Grid, Link, Typography } from '@mui/material'
 import { CartList, OrderSummary } from '../../components/cart'
 import { CreditScoreOutlined,  } from '@mui/icons-material';
 
@@ -12,15 +12,17 @@ import { dbOrders } from '../../database';
 import { IOrder } from '../../interfaces';
 
 import {  PayPalButtons } from '@paypal/react-paypal-js';
+import tesloApi from '../../api/tesloApi';
+import { useRouter } from 'next/router';
 
 export type OrderResponseBody = {
     id: string;
     status: 
-        |  "COMPLETED"
+        | "COMPLETED"
         | "SAVED"
         | "APPROVED"
         | "VOIDED"
-        |"PAYER_ACTION_REQUIRED"
+        | "PAYER_ACTION_REQUIRED"
 
 }
 
@@ -29,9 +31,34 @@ interface Props{
 }
 
 const OrderPage: NextPage<Props> = ({order}) => {
-    
+    const router = useRouter();
     const {shippingAddress} = order;
+    const [isPaying, setIsPaying] = useState(false);
 
+    const onOrderCompleted = async (details: OrderResponseBody) => {
+        //console.log({details});
+        if(details.status !== 'COMPLETED') {
+            return alert('No hay pago en Paypal');
+        }   
+
+        setIsPaying(true);
+
+        try{
+            
+            const {data} = await tesloApi.post(`/orders/pay`,{
+                transactionId: details.id,
+                orderId: order._id
+            });
+            router.reload();
+
+        }catch(error){
+            setIsPaying(false);
+            console.log(error);
+            alert('Error');
+        }
+    }
+
+    //Metodos del boton paypal
     const createOrder = async (data:any, actions:any)=> {
         return actions.order.create({
             purchase_units: [
@@ -47,8 +74,8 @@ const OrderPage: NextPage<Props> = ({order}) => {
     const onApprove =  async (data:any, actions:any) =>{
         //El pedido se captura en el servidor.
         return actions.order!.capture().then((details:any)=>{
-            console.log({details});
-            const name = details.payer.name.given_name;
+            onOrderCompleted(details);
+            //const name = details.payer.name.given_name;
             //alert(`Transaction completed by ${name}`);
         }); 
     
@@ -119,24 +146,31 @@ const OrderPage: NextPage<Props> = ({order}) => {
                                     }
                         />
 
-                        <Box sx={{ mt:3 }}
-                            display='flex' flexDirection='column'>
-                        {   
-                           order.isPaid
-                           ? (
-                               <Chip sx={{my: 2}}
-                                label="Pagada"
-                                variant='outlined'
-                                color='success'
-                                icon={<CreditScoreOutlined></CreditScoreOutlined>}></Chip>
+                        <Box sx={{ mt:3 }} display='flex' flexDirection='column'>
+                            
+                            <Box display='flex' justifyContent='center' 
+                                className='fadeIn'
+                                    sx={{display: isPaying ? 'flex':'none' }}>
+                                <CircularProgress/>
+                            </Box>
+                            <Box flexDirection='column' sx={{display: isPaying? 'none' : 'flex', flex: 1 }}>    
+                                {   
+                                order.isPaid
+                                ? (
+                                    <Chip sx={{my: 2}}
+                                        label="Pagada"
+                                        variant='outlined'
+                                        color='success'
+                                        icon={<CreditScoreOutlined></CreditScoreOutlined>}></Chip>
 
-                           ):( 
-                                <PayPalButtons
-                                    createOrder={ (data,actions) => createOrder(data,actions) }
-                                    onApprove={ (data, action) => onApprove(data, action) }   >
-                                </PayPalButtons>
-                           )
-                        }
+                                ):( 
+                                        <PayPalButtons
+                                            createOrder={ (data,actions) => createOrder(data,actions) }
+                                            onApprove={ (data, action) => onApprove(data, action) }   >
+                                        </PayPalButtons>
+                                )
+                                }
+                            </Box>
                         </Box>
                     </CardContent>
                 </Card>
