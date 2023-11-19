@@ -135,12 +135,22 @@ export const SideMenu = () => {
                             <Divider />
                             <ListSubheader>Admin Panel</ListSubheader>
 
-                            <ListItem button>
+                            <ListItem 
+                            button
+                            onClick={ ()=> navigateTo('/admin/') }>
                                 <ListItemIcon>
                                     <CategoryOutlined/>
                                 </ListItemIcon>
+                                <ListItemText primary={'Dashboard'} />
+                            </ListItem>
+
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <ConfirmationNumberOutlined/>
+                                </ListItemIcon>
                                 <ListItemText primary={'Productos'} />
                             </ListItem>
+
                             <ListItem button>
                                 <ListItemIcon>
                                     <ConfirmationNumberOutlined/>
