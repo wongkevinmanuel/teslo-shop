@@ -1,16 +1,16 @@
-import {FC } from 'react'
+import {FC, ReactNode } from 'react'
 import Head from 'next/head'
 
 import { Navbar, SideMenu } from '../ui'
 
 interface Props{
     title: string,
-    subTitle: string,
-    icon?: JSX.Element,
-    children: React.ReactNode 
+    pageDiscription?: string,
+    imageFullUrl?: string,
+    children: ReactNode
 }
 
-export const AdminLayout:FC <Props> = ({children, title, pageDiscription, imageFullUrl}) => {
+export const AuthLayout:FC <Props> = ({children, title, pageDiscription, imageFullUrl}) => {
   return (
         <>
             <Head>
