@@ -3,12 +3,14 @@ import { db } from '../../../database';
 import { Order, Product, User } from '../../../models';
 
 type Data = {
-    numberOfOrders: number;
-    paidOrders:     number;
-    numberOfClients: number;
-    numberOfProducts: number;
-    productsWithNoInventory: number;
-    lowInventory:       number;
+    numberOfOrders:         number;
+    paidOrders:             number; // isPad true
+    notPaidOrders:          number;
+    numberOfClients:        number; //role: client
+    numberOfProducts:       number;
+    productsWithNoInventory:number; //0
+    lowInventory:           number; //productos con 10 o menos
+
 } | { message: string };
 
 
@@ -46,10 +48,12 @@ export default async function (req: NextApiRequest, res: NextApiResponse<Data>) 
                     numberOfProducts,
                     productsWithNoInventory,
                     lowInventory,
+                    notPaidOrders: numberOfOrders - paidOrders
+
                 });
             }catch(error ){
                 console.log(error);
-                return res.status(401).json({message:'Error al obtener los datos.'});
+                return res.status(503).json({message:'Error al obtener los datos.'});
             }
 
         default:
