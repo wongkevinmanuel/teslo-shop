@@ -9,6 +9,7 @@ paginas address.ts o summary */
 //lado del servidor
 export async function middleware(req: NextRequest, ev: NextFetchEvent){
     let session:any;
+    
     try{
         session = await getToken({req, secret: process.env.NEXTAUTH_SECRET});
     }catch(error){
@@ -24,10 +25,18 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent){
         return NextResponse.redirect(url);
     }   
 
+    const validRoles = ['admin', 'super-user', 'SEO'];
+
+    if(!validRoles.includes(session.user.role)){
+        const url = req.nextUrl.clone()
+        url.pathname = '/'
+        return NextResponse.redirect(url);
+    }
+
     return NextResponse.next();
 }
 
 // See "Matching Paths" below to learn more
 export const config = {
-    matcher: ['/checkout/address', '/checkout/summary'],
+    matcher: ['/checkout/address', '/checkout/summary', '/api/admin/dashboard'],
 }
