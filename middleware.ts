@@ -23,6 +23,14 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent){
         url.search = `p=${ requestedPage}`;
 
         return NextResponse.redirect(url);
+        /*
+        return new Response (JSON.stringify({ message:"No autorizado"}),{
+            status: 401,
+            headers: {
+                'Content-Type' : 'application/json'
+            }
+        });
+        */
     }   
 
     const validRoles = ['admin', 'super-user', 'SEO'];
@@ -30,6 +38,15 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent){
     if(!validRoles.includes(session.user.role)){
         const url = req.nextUrl.clone()
         url.pathname = '/'
+        /*
+        return new Response (JSON.stringify({ message:"No autorizado"}),{
+            status: 401,
+            headers: {
+                'Content-Type' : 'application/json'
+            }
+        });
+        */
+        
         return NextResponse.redirect(url);
     }
 
@@ -38,5 +55,5 @@ export async function middleware(req: NextRequest, ev: NextFetchEvent){
 
 // See "Matching Paths" below to learn more
 export const config = {
-    matcher: ['/checkout/address', '/checkout/summary', '/api/admin/dashboard'],
+    matcher: ['/checkout/address', '/checkout/summary', '/admin/' , '/api/admin/dashboard'],
 }
