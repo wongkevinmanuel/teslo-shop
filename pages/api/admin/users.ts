@@ -38,10 +38,19 @@ export default function (req: NextApiRequest, res: NextApiResponse<Data>) {
         const validRoles = ['admin','super-user', 'SEO', 'client'];
 
         if(!validRoles.includes(role)){
-            res.status(400).json({ message: 'Rol no permitido' });
+            res.status(404).json({ message: 'Rol no permitido' });
         }
 
         await db.connect();
-        const users = await User.find().select();
+        const user = await User.findById(userId);
+
+        if(!user){
+            await db.disconnect();
+            return res.status(404).json({message:`Usuario no encontrado: ${userId}`});
+        }
+        
+        user.role = role;
+        await user.save();
         await db.disconnect();
+        return res.status(200).json({message: 'Usuario actualizado'});
     }
