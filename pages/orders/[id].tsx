@@ -164,10 +164,10 @@ const OrderPage: NextPage<Props> = ({order}) => {
                                         icon={<CreditScoreOutlined></CreditScoreOutlined>}></Chip>
 
                                 ):( 
-                                        <PayPalButtons
-                                            createOrder={ (data,actions) => createOrder(data,actions) }
-                                            onApprove={ (data, action) => onApprove(data, action) }   >
-                                        </PayPalButtons>
+                                    <PayPalButtons
+                                        createOrder={ (data,actions) => createOrder(data,actions) }
+                                        onApprove={ (data, action) => onApprove(data, action) }   >
+                                    </PayPalButtons>
                                 )
                                 }
                             </Box>
