@@ -1,13 +1,13 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import useSWR from 'swr';
 
-import { DataGrid, GridColDef, GridValueGetterParams,GridRowsProp, GridEventListener, GridRowId, GridCellModesModel, GridCellModes } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridValueGetterParams,GridRowsProp } from '@mui/x-data-grid';
 import { PeopleOutline } from '@mui/icons-material'
-import { Box, Button, Grid, MenuItem, Select } from '@mui/material'
+import { Grid, MenuItem, Select } from '@mui/material'
 
 import { AdminLayout } from '../../components/layouts'
 import { IUser } from '../../interfaces';
-import tesloApi from '../../api';
+import { tesloApi } from '../../api';
 
 const usersPage = () => {
        
@@ -43,25 +43,21 @@ const usersPage = () => {
         }catch(error){
             setUsers( previousUsers );
             console.log(error);
-            alert('No se pudo actualizar el role del usuario');
+            alert('No se pudo actualizar el rol del usuario');
         }
-
     }
 
     const columns: GridColDef [] = [
-            { field: 'email'
-            , headerName: 'Correo', width: 250
-             },
-            { field: 'name' 
-            , headerName: 'Nombres', width: 300
-             },
+            { field: 'email', headerName: 'Correo', width: 250 },
+            { field: 'name' , headerName: 'Nombres', width: 300},
             { 
             field: 'role' 
             , headerName: 'Rol'
             , width: 300
             , editable: true 
             , renderCell: ({row}: GridValueGetterParams) => {
-                return (<Select
+                return (
+                <Select
                     value={row.role}
                     label="Rol"
                     onChange={ ({target}) => onRoleUpdate( row.id, target.value) }
@@ -92,7 +88,6 @@ const usersPage = () => {
         <Grid container className='fadeIn'>
             <Grid item xs={12} sx={{ height: 650, width: '100%'}}>
                 <DataGrid
-                    
                     rows={ rows }
                     columns={ columns }
                     
