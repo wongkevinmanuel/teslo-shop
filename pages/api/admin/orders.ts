@@ -16,8 +16,17 @@ export default function (req: NextApiRequest, res: NextApiResponse<Data>) {
 }
 
 async function getAllOrders(req: NextApiRequest, res: NextApiResponse<Data>) {
-    db.connect();
-    const ordenes =  await Order.find().sort({createdAt: 'desc'}).populate('user','name email').lean();
-    db.disconnect();
-    return res.status(200).json( ordenes );
+    try{
+        db.connect();
+        const ordenes =  await Order.find().sort({createdAt: 'desc'})
+        .populate('user','name email').lean();
+        //populate sirve 
+        //
+        
+        db.disconnect();
+        return res.status(200).json( ordenes );
+    }catch(err){
+        return res.status(400).json( { message: 'Bad request' } );
+    }
+
 }
