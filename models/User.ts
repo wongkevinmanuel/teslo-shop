@@ -9,7 +9,7 @@ const userSchema = new Schema({
         type: String,
         enum: {
             values: ['admin', 'client','super-user','SEO'],
-            message: '{VALUE} no es un valor valido',
+            message: '{VALUE} no es un valor válido',
             default: 'client',
             required: true
         }

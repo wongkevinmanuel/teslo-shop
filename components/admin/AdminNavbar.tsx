@@ -14,7 +14,7 @@ export const AdminNavbar = () => {
     <AppBar>
         <Toolbar>
             <Link display='flex' alignItems='center' component={NextLink} href='/'>
-                <Typography variant='h6'> Teslo - </Typography>
+                <Typography variant='h6'> Teslo | </Typography>
                 <Typography sx={{ml: 0.5}}> Shop</Typography>
             </Link>
             

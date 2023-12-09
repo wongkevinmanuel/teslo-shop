@@ -1,8 +1,8 @@
 import {FC } from 'react' 
+import { Box, Typography } from '@mui/material'
 
 import { Navbar, SideMenu } from '../ui'
 import { AdminNavbar } from '../admin'
-import { Box, Typography } from '@mui/material'
 
 interface Props{
     title: string,
@@ -26,8 +26,7 @@ export const AdminLayout:FC <Props> = ({title, subTitle, icon, children}) => {
                 padding:'0px 30px'}}>
                     <Box display='flex' flexDirection='column'>
                         <Typography variant='h1' component='h1'>
-                            { icon }
-                            { title }
+                            { icon } {' '} { title }
                         </Typography>
                         <Typography variant='h2' sx={{mb:1}}>
                             {subTitle}
