@@ -1,8 +1,9 @@
 import React, { useState , useEffect} from 'react'
 import useSWR from 'swr';
 
-import { AdminLayout } from '../../components/layouts'
 import { AccessTimeOutlined, AttachMoneyOutlined, CancelPresentationOutlined, CategoryOutlined, CreditCardOffOutlined, CreditCardOutlined, DashboardOutlined, GroupAddOutlined, ProductionQuantityLimits } from '@mui/icons-material'
+
+import { AdminLayout } from '../../components/layouts'
 import { Grid, Typography } from '@mui/material'
 import { SummaryTile } from '../../components/admin'
 import { DashboardSummaryResponse } from '../../interfaces';
@@ -42,8 +43,6 @@ const DashboardPage = () => {
     console.log(error);
     return <Typography> Error al cargar la información. </Typography>
   }
-
-
 
   return (
     <AdminLayout
