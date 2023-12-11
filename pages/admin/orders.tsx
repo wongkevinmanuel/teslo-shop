@@ -30,20 +30,20 @@ const ordersPage = () => {
         { field: 'id', headerName: 'Orden ID', width: 250 },
         { field: 'email', headerName: 'Correo', width: 250 },
         { field: 'name', headerName: 'Nombres', width: 300 },
-        { field: 'total', headerName: 'Monto Total', width: 250,
+        { field: 'total', headerName: 'Monto Total', width: 150,
                 renderCell: ({row}: GridValueGetterParams)=> {
                     return (<>${row.total}</>);    
                 } },
         { field: 'isPaid'
             , headerName: 'Pagada'
-            , width: 250
+            , width: 125
             , renderCell: ({row}: GridValueGetterParams) => {
                 return row.isPaid ?
                       ( <Chip variant='outlined' label='Pagada' color='success' />) 
                     : ( <Chip variant='outlined' label='Pendiente' color='error'/>)
             } 
         },
-        { field: 'numProducts', headerName: 'No.Productos', width: 150 , align:'center' },
+        { field: 'numProducts', headerName: 'No.Productos', width: 125 , align:'center' },
         { field: 'check'
             , headerName: 'Ver orden'
             , renderCell: ( {row}: GridValueGetterParams )=> {
