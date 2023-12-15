@@ -24,8 +24,6 @@ const ordersPage = () => {
 
     if(!data && !error ) (<></>);
 
-    console.log(data);
-
     const columns : GridColDef[]  = [
         { field: 'id', headerName: 'Orden ID', width: 250 },
         { field: 'email', headerName: 'Correo', width: 250 },
