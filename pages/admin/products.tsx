@@ -1,12 +1,13 @@
 import React from 'react'
 import useSWR from 'swr';
+
+import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import Link from 'next/link';
+import { Box, Button, CardMedia, Grid } from '@mui/material';
+import { AddOutlined, CategoryOutlined } from '@mui/icons-material';
+
 import { IProduct } from '../../interfaces';
 import { AdminLayout } from '../../components/layouts';
-import { Box, Button, CardMedia, Grid } from '@mui/material';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import { AddOutlined, CategoryOutlined } from '@mui/icons-material';
-import Link from 'next/link';
-
 
 const columns: GridColDef[] = [
     {
