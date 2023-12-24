@@ -50,7 +50,8 @@ const ProductAdminPage:FC<Props> = ({product}) => {
 
     //useEffect afecta cuando watch, setValue cambian
     useEffect( () =>{
-        const subscription = watch((value, {name, type})=> {
+        const subscription = watch( (value, {name, type}) => {
+            
             if(name === 'title'){
                 const newSlug = value.title?.trim()
                     .replaceAll(' ', '_')
@@ -166,7 +167,7 @@ const ProductAdminPage:FC<Props> = ({product}) => {
 
     return (
     <AdminLayout title={'Producto'}
-        subTitle={`Editando: ${product.title }`}
+        subTitle={`${product.title === undefined ? 'Nuevo': 'Editando: ' + product.title}`}
         icon={ <DriveFileRenameOutline/> }>
         <form onSubmit={ handleSubmit(onSubmit )}>
             <Box display='flex' justifyContent='end' sx={{mb: 1 }} >
