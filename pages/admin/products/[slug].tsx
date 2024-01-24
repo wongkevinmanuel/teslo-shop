@@ -1,11 +1,12 @@
 import React, {ChangeEvent, FC, useEffect, useRef, useState} from 'react'
-import { IProduct } from '../../../interfaces'
-import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/router';
+import { DriveFileRenameOutline, SaveOutlined, UploadOutlined } from '@mui/icons-material';
+import { Box, Button, capitalize, Card, CardActions, CardMedia, Checkbox, Chip, Divider, FormControl, FormControlLabel, FormGroup, FormLabel, Grid,  Radio, RadioGroup, TextField } from '@mui/material';
+
 import { AdminLayout } from '../../../components/layouts';
-import { Box, Button, capitalize, Card, CardActions, CardMedia, Checkbox, Chip, Divider, FormControl, FormControlLabel, FormGroup, FormLabel, Grid, ListItem, Paper, Radio, RadioGroup, TextField } from '@mui/material';
-import { DriveFileRenameOutline, SaveOutlined, UploadFileOutlined, UploadOutlined } from '@mui/icons-material';
 import { tesloApi } from '../../../api';
+import { IProduct } from '../../../interfaces'
 
 interface Props{
     product: IProduct;
@@ -37,6 +38,7 @@ const ProductAdminPage:FC<Props> = ({product}) => {
     
     
     const router = useRouter();
+    //Mantiene la referencia html al input de imagen
     const fileInputRef = useRef<HTMLInputElement>(null);
     
     const [ newTagValue , setNewTagValue ] = useState('');
@@ -93,35 +95,39 @@ const ProductAdminPage:FC<Props> = ({product}) => {
         const updatedTags = getValues('tags').filter(t => t !== tag);
         setValue('tags', updatedTags, {shouldValidate: true });
     }
-
-    const onFilesSelected = async ({target}: ChangeEvent<HTMLInputElement> ) => {
-        if(!target.files || target.files.length === 0 ){
-            return;
-        }
-
-        try{
-            for(const file of target.files ){
-                const formData = new FormData();
-                
-                formData.append('file',file);
-                
-                console.log(file);
-                
-                const { data } = await tesloApi.post<{ message: string}>('/admin/upload', formData);
-                setValue('images', [...getValues('images'), data.message ], { shouldValidate: true }); 
-            }
-
-        }catch(error){
-            console.log({error});
-        }
-    }
-
+    
     const onDeleteImage = ( image:string) => {
         setValue(
             'images',
             getValues('images').filter(img => img !== image),
             { shouldValidate: true }
         )
+    }
+
+    //Se dispara cuando se selecciona archivos
+    const onFilesSelected = async ({target}: ChangeEvent<HTMLInputElement> ) => {
+        
+        if(!target.files || target.files.length === 0 ){
+            //abrio selector y cancelo
+            return;
+        }
+        try{
+            for(const file of target.files ){
+                
+                const formData = new FormData();
+                formData.append('file',file);
+                formData.append('upload_preset','teslo-shop');
+                
+                //TODO: dispatch setSaving() bloque a los botones, poner la app en estado de carga
+                console.log(`Archivo cargado: ${file.name}`)
+                console.log(file);
+                const { data } = await tesloApi.post<{ message: string}>('/admin/upload', formData);
+                setValue('images', [...getValues('images'), data.message ], { shouldValidate: true }); 
+            }
+        }catch(error){
+            console.log({error});
+            
+        }
     }
 
     const onSubmit = async (form: FormData) => {
@@ -151,7 +157,9 @@ const ProductAdminPage:FC<Props> = ({product}) => {
                 method: form._id ? 'PUT' : 'POST', // si tenemos un _id, entonces actualizar, si no crear
                 data: form
             }) 
+            
             console.log({data});
+
             if(!form._id){
                 router.replace(`/admin/products/${form.slug }`);
             }else{
@@ -164,7 +172,7 @@ const ProductAdminPage:FC<Props> = ({product}) => {
 
     
     }
-
+    
     return (
     <AdminLayout title={'Producto'}
         subTitle={`${product.title === undefined ? 'Nuevo': 'Editando: ' + product.title}`}

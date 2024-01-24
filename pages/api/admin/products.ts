@@ -5,6 +5,9 @@ import { IProduct } from '../../../interfaces'
 import { Product } from '../../../models';
 import { db } from '../../../database';
 
+import { v2 as cloudinary } from 'cloudinary';
+cloudinary.config( process.env.CLOUDINARY_URL || '');
+
 type Data = 
 |{  message: string }
 | IProduct[]
@@ -35,7 +38,15 @@ const getProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     await db.disconnect();
     
     //TODO: host de imagenes cambiar
-    //const updatedProducts = products.map();
+    const updatedProducts = products.map(
+        product => {
+            //HOST_NAME
+            product.images = product.images.map( image => {
+                return image.includes('http') ? image : `${process.env.HOST_NAME}products/${image}`
+            });
+            return product;
+        }
+    );
 
     if(!products)
         res.status(400).json({message: 'Error al buscar todos los productos'});
@@ -63,6 +74,7 @@ const createProduct= async (req: NextApiRequest, res: NextApiResponse<Data> )=> 
         await db.disconnect();
         
         return res.status(201).json( product );
+
     }catch(error){
         console.log(error);
         await db.disconnect();
@@ -101,22 +113,22 @@ async function updateProduct(req: NextApiRequest, res: NextApiResponse<Data>) {
     }
 
     //TODO: posiblemente tendremos un localhost:3000/products/ass.jpg
+    const product = await findByIdProduct( _id );
+    if(!product){
+        db.disconnect();
+        return res.status(400).json({ message: 'No existe un producto con ese ID'});
+    }
+    
     try{
-
-        const product = await findByIdProduct( _id );
-        if(!product){
-            db.disconnect();
-            return res.status(400).json({ message: 'No existe un producto con ese ID'});
-        }
-
         // TODO: eliminar fotos en Cloudinary
         // https://res.cloudinary.com/cursos-udemy/image/upload/v1645914028/nct31gbly4kde6cncc6i.jpg
+        // https://res.cloudinary.com/dgeig1ohh/image/upload/v1704991010/cld-sample-5.jpg
         product.images.forEach( async (image) => {
             if(!images.includes(image)){
                 //Borrar cloudinary
                 const [fileId, extension ] = image.substring(image.lastIndexOf('/')+1).split('.');
                 console.log({image, fileId, extension});
-                //await cloudinary.uploader.destroy(fileId);
+                await cloudinary.uploader.destroy(fileId);
             }
         });
 
