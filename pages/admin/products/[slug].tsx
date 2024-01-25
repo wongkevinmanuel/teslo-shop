@@ -121,12 +121,13 @@ const ProductAdminPage:FC<Props> = ({product}) => {
                 //TODO: dispatch setSaving() bloque a los botones, poner la app en estado de carga
                 console.log(`Archivo cargado: ${file.name}`)
                 console.log(file);
-                const { data } = await tesloApi.post<{ message: string}>('/admin/upload', formData);
-                setValue('images', [...getValues('images'), data.message ], { shouldValidate: true }); 
+                setValue('images', [...getValues('images'), file.name ], { shouldValidate: true }); 
+                
+                //const { data } = await tesloApi.post<{ message: string}>('/admin/upload', formData);
+                //setValue('images', [...getValues('images'), data.message ], { shouldValidate: true }); 
             }
         }catch(error){
             console.log({error});
-            
         }
     }
 
