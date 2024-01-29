@@ -1,17 +1,17 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { isValidObjectId } from 'mongoose';
 
-import { IProduct } from '../../../interfaces'
-import { Product } from '../../../models';
-import { db } from '../../../database';
-
 import { v2 as cloudinary } from 'cloudinary';
 cloudinary.config( process.env.CLOUDINARY_URL || '');
+
+import { db } from '../../../database';
+import { IProduct } from '../../../interfaces'
+import { Product } from '../../../models';
 
 type Data = 
 |{  message: string }
 | IProduct[]
-| IProduct
+| IProduct;
 
 export default function (req: NextApiRequest, res: NextApiResponse<Data>) {
     
