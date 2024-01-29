@@ -24,6 +24,30 @@ export default function handler(req: NextApiRequest
         }
 }
 
-function UploadFile(req: NextApiRequest, res: NextApiResponse<Data>) {
-    throw new Error('Function not implemented.');
+const saveFile = async (file: formidable.File): Promise<string> =>{
+    const {securre_url } = await cloudinary.uploader.upload(file.filepath);
+    return securre_url;
+}
+
+const parseFiles = async(req:NextApiRequest): Promise<string> => {
+
+    return new Promise( (resolve, reject )=> {
+            const form = new formidable.IncomingForm();
+                form.parse( req, async(err, fields, files ) => {
+                        if(err)
+                            return reject(err);
+
+                            const filePath = await saveFile(files.files as formidable.File);
+                            resolve(filePath);
+                    }
+
+            );
+        }
+    );
+}
+
+const UploadFile= ()=> async (req: NextApiRequest, res: NextApiResponse<Data>) {
+    const imageUrl = await parseFiles(req);
+
+    return res.status(200).json({message: imageUrl });
 }
