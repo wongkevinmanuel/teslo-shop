@@ -123,8 +123,9 @@ const ProductAdminPage:FC<Props> = ({product}) => {
                 console.log(file);
                 setValue('images', [...getValues('images'), file.name ], { shouldValidate: true }); 
                 
-                //const { data } = await tesloApi.post<{ message: string}>('/admin/upload', formData);
-                //setValue('images', [...getValues('images'), data.message ], { shouldValidate: true }); 
+                const { data } = await tesloApi.post<{ message: string}>('/admin/upload', formData);
+                console.log( `Image URL: ${data}`);
+                setValue('images', [...getValues('images'), data.message ], { shouldValidate: true }); 
             }
         }catch(error){
             console.log({error});
