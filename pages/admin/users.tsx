@@ -9,7 +9,7 @@ import { AdminLayout } from '../../components/layouts'
 import { IUser } from '../../interfaces';
 import { tesloApi } from '../../api';
 
-const usersPage = () => {
+const UsersPage = () => {
        
     const {data, error} = useSWR<IUser[]>('/api/admin/users');
     
@@ -21,13 +21,14 @@ const usersPage = () => {
     },[data]) //agreglo de dependencia
     
     // Si no hay data y no hay error
-    //loading
+    // loading
     if(!data && !error ){ 
         return (<></>)
     }
 
-    const onRoleUpdate = async(userId: string, newRole:string )=> {
-
+    const onRoleUpdated = async(userId: string, newRole:string )=> {
+        
+        //Mejor experiencia del usuario parra seleccion de Rol
         const previousUsers = users.map( user => ({...user }) );
         const updatedUsers = users.map( user => ({
             ...user,
@@ -37,9 +38,7 @@ const usersPage = () => {
         setUsers(updatedUsers);
 
         try{
-
             await tesloApi.put('/admin/users', { userId, role: newRole});
-
         }catch(error){
             setUsers( previousUsers );
             console.log(error);
@@ -47,6 +46,7 @@ const usersPage = () => {
         }
     }
 
+    //Definir columnas
     const columns: GridColDef [] = [
             { field: 'email', headerName: 'Correo', width: 250 },
             { field: 'name' , headerName: 'Nombres', width: 300},
@@ -56,18 +56,16 @@ const usersPage = () => {
             , width: 300
             , editable: true 
             , renderCell: ({row}: GridValueGetterParams) => {
-                return (
-                <Select
-                    value={row.role}
-                    label="Rol"
-                    onChange={ ({target}) => onRoleUpdate( row.id, target.value) }
-                    sx={{width:'300px'}}
-                    >
-                        <MenuItem value='admin'> Admin </MenuItem>
-                        <MenuItem value='client'> Client </MenuItem>
-                        <MenuItem value='super-user'> Super User </MenuItem>
-                        <MenuItem value='SEO'> SEO </MenuItem>
-                    </Select>)
+                return (<Select
+                            value={row.role}
+                            label="Rol"
+                            onChange={ ({target}) => onRoleUpdated( row.id, target.value) }
+                            sx={{width:'300px'}}>
+                                <MenuItem value='admin'>    Admin </MenuItem>
+                                <MenuItem value='client'>   Client </MenuItem>
+                                <MenuItem value='super-user'> Super User </MenuItem>
+                                <MenuItem value='SEO'>      SEO </MenuItem>
+                        </Select>)
                 },
             }
     ];
@@ -98,4 +96,4 @@ const usersPage = () => {
   )
 }
 
-export default usersPage
+export default UsersPage

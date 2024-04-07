@@ -31,14 +31,14 @@ export default function (req: NextApiRequest, res: NextApiResponse<Data>) {
         
         const { userId = '', role= ''} = req.body;
         
-        if(isValidObjectId(userId)){
-            res.status(400).json({ message: 'NO existe usuario por ese id' });
+        //kkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkkk
+        if(!isValidObjectId(userId)){
+            return res.status(400).json({ message: 'NO existe usuario por ese id' });
         }
         
         const validRoles = ['admin','super-user', 'SEO', 'client'];
-
         if(!validRoles.includes(role)){
-            res.status(404).json({ message: 'Rol no permitido' });
+            return res.status(404).json({ message: 'Rol no permitido' + validRoles.join(', ')});
         }
 
         await db.connect();
