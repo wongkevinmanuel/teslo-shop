@@ -100,7 +100,6 @@ async function productFindOne(slug:string ){
         }
     }
 
-
 async function updateProduct(req: NextApiRequest, res: NextApiResponse<Data>) {
     const {_id ='', images= [] } = req.body as IProduct;
 

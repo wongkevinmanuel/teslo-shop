@@ -4,7 +4,7 @@ import { Order } from '../../../models';
 import { IOrder } from '../../../interfaces/order';
 
 type Data = | { message: string }
-            |    IOrder[] ;
+            |    IOrder[];
 
 export default function (req: NextApiRequest, res: NextApiResponse<Data>) {
     switch (req.method) {
@@ -15,13 +15,15 @@ export default function (req: NextApiRequest, res: NextApiResponse<Data>) {
         }
 }
 
-async function getAllOrders(req: NextApiRequest, res: NextApiResponse<Data>) {
+const getAllOrders = async (req: NextApiRequest, res: NextApiResponse<Data>) {
+    
     try{
-        db.connect();
-        const ordenes =  await Order.find().sort({createdAt: 'desc'})
-        .populate('user','name email').lean();
-        //populate sirve 
-        //
+         await db.connect();
+        const ordenes =  await Order.find()
+            .sort({createdAt: 'desc'})
+            .populate('user','name email')
+            .lean();
+        //populate : llenar informacion
         
         db.disconnect();
         return res.status(200).json( ordenes );
