@@ -1,22 +1,25 @@
 import React, {ChangeEvent, FC, useEffect, useRef, useState} from 'react'
 import { useForm } from 'react-hook-form';
-import { useRouter } from 'next/router';
-import { DriveFileRenameOutline, SaveOutlined, UploadOutlined } from '@mui/icons-material';
+
 import { Box, Button, capitalize, Card, CardActions, CardMedia, Checkbox, Chip, Divider, FormControl, FormControlLabel, FormGroup, FormLabel, Grid,  Radio, RadioGroup, TextField } from '@mui/material';
+import { DriveFileRenameOutline, SaveOutlined, UploadOutlined } from '@mui/icons-material';
+
+import { useRouter } from 'next/router';
 
 import { AdminLayout } from '../../../components/layouts';
 import { tesloApi } from '../../../api';
 import { IProduct } from '../../../interfaces'
 
-interface Props{
-    product: IProduct;
-}
-
 const validTypes = ['shirts','pants','hoodies','hats'];
 const validGender = ['men','women','kid','unisex'];
 const validSizes = ['XS','S','M','L','XL','XXL','XXXL'];
 
+interface Props{
+    product: IProduct;
+}
+
 interface FormData {
+    //No id if create new product
     _id?        : string;
     description : string;
     images      : string[];
@@ -45,12 +48,18 @@ const ProductAdminPage:FC<Props> = ({product}) => {
     const [isSaving, setIsSaving ] = useState(false);
 
     //Register el formulario
-    //watch
+    //watch: nos pertmie observar los cambios de inputs, forms
+    //getValues: optione todo el valor del formulario en el momento de
+    //ser llamado
+    //setValue: establecer un valor de manera controlada
+    //no re-render de react
     const {register, handleSubmit, formState: {errors} , getValues, setValue, watch } = useForm<FormData>({
         defaultValues: product
     });
 
+    //useEffect se dispara cuando el form cambia
     //useEffect afecta cuando watch, setValue cambian
+
     useEffect( () =>{
         const subscription = watch( (value, {name, type}) => {
             
@@ -59,10 +68,17 @@ const ProductAdminPage:FC<Props> = ({product}) => {
                     .replaceAll(' ', '_')
                     .replaceAll("'","")
                     .toLocaleLowerCase() ||  '';
-            }
 
+                //Establecer la sugerencia del titulo en el slug
+                setValue('slug',newSlug);
+                
+            }
         }); 
-        
+
+        //watch crea un observable
+        //crea un objeto que siempre se ejecuta y se escucha
+        //cuando ya no se ocupa el wathc/pantalla
+        //se debe destruir con 
         return ()=> subscription.unsubscribe();
 
     }, [watch, setValue])
@@ -246,6 +262,7 @@ const ProductAdminPage:FC<Props> = ({product}) => {
                     helperText={errors.price?.message}
                     />
                 <Divider sx={{ my: 1}}/>
+
                 <FormControl sx={{mb: 1 }}>
                     <FormLabel>Tipo</FormLabel>
                     <RadioGroup

@@ -1,10 +1,11 @@
 import React from 'react'
 import useSWR from 'swr';
 
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
-import Link from 'next/link';
 import { Box, Button, CardMedia, Grid } from '@mui/material';
 import { AddOutlined, CategoryOutlined } from '@mui/icons-material';
+
+import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import Link from 'next/link';
 
 import { IProduct } from '../../interfaces';
 import { AdminLayout } from '../../components/layouts';
@@ -23,8 +24,10 @@ const columns: GridColDef[] = [
                 </a>)
         })
     },
-    { field:'title', headerName:'Titulo', width: 250,
-    renderCell: ({row}: GridValueGetterParams) => {
+    { 
+        field:'title', 
+        headerName:'Titulo', width: 250,
+        renderCell: ({row}: GridValueGetterParams) => {
         return (
             <Link href={`/admin/products/${row.slug }`} passHref>
                 {row.title}
@@ -55,9 +58,10 @@ const ProductsPage = () => {
     }));
 
   return (
-    <AdminLayout title={`Productos (${data?.length } )`}
+    <AdminLayout title={`Productos (${data?.length })`}
                 subTitle={'Mantenimiento de productos'}
                 icon={<CategoryOutlined/>}>
+                    
         <Box display='flex' justifyContent='end' sx={{mb: 2}}>
             <Button startIcon={ <AddOutlined /> }
                 color='secondary'

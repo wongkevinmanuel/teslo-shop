@@ -31,6 +31,8 @@ export default function (req: NextApiRequest, res: NextApiResponse<Data>) {
 const getProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     
     await db.connect();
+    //Aplicar a la consulta paginacion,ordenamiento
+    //del lado del servidor
     const products = await Product.find()
         .sort({title: 'asc'})
         .lean();
