@@ -44,7 +44,9 @@ const ProductAdminPage:FC<Props> = ({product}) => {
     //Mantiene la referencia html al input de imagen
     const fileInputRef = useRef<HTMLInputElement>(null);
     
+    //CONTROLAR VALOR DE TAG/ETIQUETA
     const [ newTagValue , setNewTagValue ] = useState('');
+
     const [isSaving, setIsSaving ] = useState(false);
 
     //Register el formulario
@@ -94,9 +96,12 @@ const ProductAdminPage:FC<Props> = ({product}) => {
         setValue('sizes', [...currentSizes, size], {shouldValidate: true});
     }
 
+    //METODOS PARA CREAR ETIQUETA
     const onNewTag = () => {
+                        //TRIM quita cualquier espacion inicio y final
         const newTag = newTagValue.trim().toLocaleUpperCase();
         setNewTagValue('');
+        //crear nuevo arreglo de etiquetas tags
         const currentTags = getValues('tags');
 
         if(currentTags.includes(newTag)){
@@ -112,6 +117,7 @@ const ProductAdminPage:FC<Props> = ({product}) => {
         setValue('tags', updatedTags, {shouldValidate: true });
     }
     
+
     const onDeleteImage = ( image:string) => {
         setValue(
             'images',
@@ -127,11 +133,18 @@ const ProductAdminPage:FC<Props> = ({product}) => {
             //abrio selector y cancelo
             return;
         }
+        console.log("onFileSelected ........ ");
+        console.log(target.files);
+        
         try{
             for(const file of target.files ){
                 
                 const formData = new FormData();
                 formData.append('file',file);
+                const { data } = await tesloApi.post<{message:string}>('/admin/upload', formData);
+                console.log(file);
+                
+                /*formData.append('file',file);
                 formData.append('upload_preset','teslo-shop');
                 
                 //TODO: dispatch setSaving() bloque a los botones, poner la app en estado de carga
@@ -142,6 +155,7 @@ const ProductAdminPage:FC<Props> = ({product}) => {
                 const { data } = await tesloApi.post<{ message: string}>('/admin/upload', formData);
                 console.log( `Image URL: ${data}`);
                 setValue('images', [...getValues('images'), data.message ], { shouldValidate: true }); 
+                */
             }
         }catch(error){
             console.log({error});
@@ -167,6 +181,7 @@ const ProductAdminPage:FC<Props> = ({product}) => {
         }
         */
         
+        //Enviar solo una vez submit
         setIsSaving(true);
         
         try{
@@ -187,8 +202,6 @@ const ProductAdminPage:FC<Props> = ({product}) => {
             console.log(error);
             setIsSaving(false);
         }
-
-    
     }
     
     return (
@@ -362,6 +375,7 @@ const ProductAdminPage:FC<Props> = ({product}) => {
                         })
                     }
                 </Box>
+
                 {/* IMAGENES */}
                 <Divider sx={{ my: 2 }}/>
                 <Box display='flex' flexDirection='column'>
@@ -440,6 +454,7 @@ export const getServerSideProps: GetServerSideProps = async ({query}) => {
     if( slug === 'new' ){
         //Crear producto
         const tempProduct = JSON.parse( JSON.stringify(new Product() ));
+        //eliminar propiedad _id
         delete tempProduct._id;
         tempProduct.images = ['img1.jpg', 'img2.jpg'];
         product = tempProduct;

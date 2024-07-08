@@ -113,7 +113,7 @@ async function updateProduct(req: NextApiRequest, res: NextApiResponse<Data>) {
         return res.status(400).json({message:'Es necesario al menos 2 imágenes'});
     }
 
-    //TODO: posiblemente tendremos un localhost:3000/products/ass.jpg
+    //TODO: CAMBIAR POR localhost:3000/products/ass.jpg
     const product = await findByIdProduct( _id );
     if(!product){
         db.disconnect();
@@ -122,6 +122,7 @@ async function updateProduct(req: NextApiRequest, res: NextApiResponse<Data>) {
     
     try{
         // TODO: eliminar fotos en Cloudinary
+        // Si la imagen es eliminada ya no se encuentra, tambien se elimina del host de claudinary
         // https://res.cloudinary.com/cursos-udemy/image/upload/v1645914028/nct31gbly4kde6cncc6i.jpg
         // https://res.cloudinary.com/dgeig1ohh/image/upload/v1704991010/cld-sample-5.jpg
         product.images.forEach( async (image) => {

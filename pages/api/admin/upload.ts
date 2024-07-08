@@ -5,6 +5,7 @@ import formidable, {File}  from 'formidable';
 import fs from 'fs';
 import path from 'path';
 
+
 cloudinary.config({
         cloud_name: process.env.CLOUDINARY_NAME, 
         api_key: process.env.CLOUDINARY_API_KEY,
@@ -16,6 +17,9 @@ type Data = {
     message: string | undefined 
 }
 
+//Configuracion para next 
+//para no serializar objeto 
+//de imagen del body
 export const config = {
     api: {
         bodyParser: false,
@@ -33,9 +37,14 @@ export default function handler(req: NextApiRequest
         }
 }
 
-const saveFile = async (file: formidable.File ): Promise<string> =>{
-    const {secure_url } = await cloudinary.uploader.upload(file.filepath);
-    return secure_url;
+const saveFileSystem = async (file: formidable.File ) => {
+    //Metodos para guardar en servicios de cloudinary
+    //const {secure_url } = await cloudinary.uploader.upload(file.filepath);
+    //return secure_url;
+    const data = fs.readFileSync(file.filepath);
+    fs.writeFileSync(`./public/${ file.originalFilename}`,data);
+    fs.unlinkSync( file.filepath);
+    return;
 }
 
 type ProcessedFiles = Array<[string ,File]>;
@@ -44,7 +53,8 @@ let resultBody = { status: 'ok', message: 'Files were uploaded successfully' };
 
 
 const parseFiles = async(req:NextApiRequest) => {
-console.log("upload.... file....");
+    //Configurar para en envio de imagen
+    console.log("upload.... file....");
 
     const files = await new Promise<ProcessedFiles | undefined >( (resolve, reject )=> {
             const form = new formidable.IncomingForm();
@@ -87,8 +97,32 @@ console.log("upload.... file....");
     ); */
 }
 
-const UploadFile = async (req: NextApiRequest, res: NextApiResponse<Data>)=>{
-    const imageUrl: string | undefined  = await parseFiles(req);
+//Almacenar archivos en file System
+const parseFilesSystem = (req: NextApiRequest)=>{
 
-    return res.status(200).json({ message: imageUrl  });
+    return new Promise( (resolve, reject)=>{
+        
+        //preparar obj formidable para manejar form
+        const form = new formidable.IncomingForm();
+        form.parse(req, async(err, fields, files) => {
+            console.log({err, fields, files});
+            
+            if(err){
+                return reject(err);
+            }
+            //envio un archivo al metodo
+            await saveFileSystem(files.file as formidable.File);
+            resolve(true);
+        });
+    } );
+}
+
+const UploadFile = async (req: NextApiRequest, res: NextApiResponse<Data>)=>{
+    // subir archivos clounarid 
+    //const imageUrl: string | undefined  = await parseFilesSystem(req);
+    //return res.status(200).json({ message: imageUrl  });
+    
+    console.log('request');
+    await parseFilesSystem(req);
+    return res.status(200).json({message:"Imagen subida"});
 }
