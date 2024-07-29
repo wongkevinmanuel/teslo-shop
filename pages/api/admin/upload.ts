@@ -1,11 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next' 
-import { v2 as cloudinary } from 'cloudinary';
 
 import formidable, {File}  from 'formidable';
 import fs from 'fs';
 import path from 'path';
 
-
+import { v2 as cloudinary } from 'cloudinary';
+//Variables de entorno
 cloudinary.config({
         cloud_name: process.env.CLOUDINARY_NAME, 
         api_key: process.env.CLOUDINARY_API_KEY,
@@ -37,20 +37,14 @@ export default function handler(req: NextApiRequest
         }
 }
 
-const saveFileSystem = async (file: formidable.File ) => {
-    //Metodos para guardar en servicios de cloudinary
-    //const {secure_url } = await cloudinary.uploader.upload(file.filepath);
-    //return secure_url;
-    const data = fs.readFileSync(file.filepath);
-    fs.writeFileSync(`./public/${ file.originalFilename}`,data);
-    fs.unlinkSync( file.filepath);
-    return;
-}
-
 type ProcessedFiles = Array<[string ,File]>;
 let status = 200;
 let resultBody = { status: 'ok', message: 'Files were uploaded successfully' };
 
+const saveFile = async(file: formidable.File):Promise<string> =>{
+    const  { secure_url } = await cloudinary.uploader.upload(file.filepath);
+    return secure_url;
+}
 
 const parseFiles = async(req:NextApiRequest) => {
     //Configurar para en envio de imagen
@@ -97,32 +91,8 @@ const parseFiles = async(req:NextApiRequest) => {
     ); */
 }
 
-//Almacenar archivos en file System
-const parseFilesSystem = (req: NextApiRequest)=>{
-
-    return new Promise( (resolve, reject)=>{
-        
-        //preparar obj formidable para manejar form
-        const form = new formidable.IncomingForm();
-        form.parse(req, async(err, fields, files) => {
-            console.log({err, fields, files});
-            
-            if(err){
-                return reject(err);
-            }
-            //envio un archivo al metodo
-            await saveFileSystem(files.file as formidable.File);
-            resolve(true);
-        });
-    } );
-}
-
 const UploadFile = async (req: NextApiRequest, res: NextApiResponse<Data>)=>{
     // subir archivos clounarid 
-    //const imageUrl: string | undefined  = await parseFilesSystem(req);
-    //return res.status(200).json({ message: imageUrl  });
-    
-    console.log('request');
-    await parseFilesSystem(req);
-    return res.status(200).json({message:"Imagen subida"});
+    const imageUrl: string | undefined  = await parseFiles(req);
+    return res.status(200).json({ message: imageUrl  });    
 }

@@ -28,8 +28,7 @@ const ProductPage:FC<Props> = ({product}) => {
     } */
 
     /* PAGINA PREGENERADA DEL LADO DEL SERVIDOR */
-    //Tener estado local de la pagina
-    //products por slock
+    //Tener estado local de la pagina products por slock
     const [temCartProduct, setTemCartProduct] = useState<ICartProduct>({
         //products siempre generado del lado del servidor
         _id:product._id,
@@ -42,7 +41,6 @@ const ProductPage:FC<Props> = ({product}) => {
         quantity: 1
     });
 
-    //SELECCIONAR TAMANO PRODUCTOS 
     const selectedSize = ( size: ISize) => {
         //desestructuracion con ... 
         setTemCartProduct( currentproduct => ({
@@ -178,19 +176,11 @@ export const getStaticPaths: GetStaticPaths = async (ctx) => {
     
     //Optiene todos los slugs de los productos de BD
     const productSlugs = await dbProducts.getAllProductSlugs();
-    //Crear arreglo para que se vea como
-    /* 
-        [
-            {
-                params: {}
-            }
-        ]
-    */
-
+    
     return{
         paths:  productSlugs.map( 
-                    (   {slug}) => ({ params: {slug} }) 
-                    ),
+                (   {slug}) => ({ params: {slug} }) 
+                ),
         fallback: 'blocking',
     }
 }

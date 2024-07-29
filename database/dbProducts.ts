@@ -7,7 +7,7 @@ export const getProductBySlug = async(slug: string):
                                     Promise<IProduct | null>=>{
     
     await db.connect();
-    //.lean para traer un objeto liegero mongo (sin metodos)
+    //.lean para traer un objeto ligero mongo (sin metodos)
     const product = await Product.findOne({slug}).lean();
     await db.disconnect();
     
@@ -15,6 +15,7 @@ export const getProductBySlug = async(slug: string):
         return null;
     }
 
+    //Url de imagen correcto
     product.images = product.images.map(image =>{
         return image.includes('http') ? image: `${ process.env.HOST_NAME}products/${image}`
     });

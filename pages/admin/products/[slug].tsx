@@ -133,8 +133,9 @@ const ProductAdminPage:FC<Props> = ({product}) => {
             //abrio selector y cancelo
             return;
         }
-        console.log("onFileSelected ........ ");
-        console.log(target.files);
+
+        //console.log("onFileSelected ........ ");
+        //console.log(target.files);
         
         try{
             for(const file of target.files ){
@@ -142,20 +143,11 @@ const ProductAdminPage:FC<Props> = ({product}) => {
                 const formData = new FormData();
                 formData.append('file',file);
                 const { data } = await tesloApi.post<{message:string}>('/admin/upload', formData);
-                console.log(file);
-                
-                /*formData.append('file',file);
-                formData.append('upload_preset','teslo-shop');
-                
+                //formData.append('file',file);
+                //formData.append('upload_preset','teslo-shop');
                 //TODO: dispatch setSaving() bloque a los botones, poner la app en estado de carga
-                console.log(`Archivo cargado: ${file.name}`)
-                console.log(file);
+                //shouldValidate: Ver cambio dde la imagen caundo suceda
                 setValue('images', [...getValues('images'), file.name ], { shouldValidate: true }); 
-                
-                const { data } = await tesloApi.post<{ message: string}>('/admin/upload', formData);
-                console.log( `Image URL: ${data}`);
-                setValue('images', [...getValues('images'), data.message ], { shouldValidate: true }); 
-                */
             }
         }catch(error){
             console.log({error});

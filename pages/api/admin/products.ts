@@ -50,10 +50,10 @@ const getProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
         }
     );
 
-    if(!products)
+    if(!updatedProducts)
         res.status(400).json({message: 'Error al buscar todos los productos'});
 
-    res.status(200).json(products);
+    res.status(200).json(updatedProducts);
 }
 
 const createProduct= async (req: NextApiRequest, res: NextApiResponse<Data> )=> {
