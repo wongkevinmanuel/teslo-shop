@@ -19,7 +19,6 @@ export const ProductSlideshow:FC<Props> = ({images}) => {
     indicators>
         {
             images.map( image => {
-                
                 return(
                     <div className={styles['each-slide']} key={image}>
                         <div style={{

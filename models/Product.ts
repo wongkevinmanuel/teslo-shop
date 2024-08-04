@@ -34,7 +34,7 @@ const productSchema = new Schema({
         timestamps: true
 });
 
-//Crear un indexe
+//Crear un indice
 productSchema.index({title:'text', tags: 'text'});
 
 const Product: Model< IProduct > = 

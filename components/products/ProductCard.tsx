@@ -1,7 +1,7 @@
 import { FC , useState, useMemo }from 'react'
 import NextLink from 'next/link';
 
-import { Link, Box, Card, CardActionArea, CardMedia, Grid, Typography, Chip, IconButton, Badge } from '@mui/material';
+import { Link, Box, Card, CardActionArea, CardMedia, Grid, Typography, Chip } from '@mui/material';
 import { IProduct } from '../../interfaces';
 
 interface Props{
@@ -30,8 +30,7 @@ export const ProductCard:FC<Props> = ({product}) => {
   const[isImageLoaded, setIsImageLoaded] = useState(false);
   /*  desactivar el prefetch de next */
   return (
-          <Grid item xs={6} 
-          sm={4}
+          <Grid item xs={6} sm={4}
           onMouseEnter={()=> {setIsHovered(true)}}
           onMouseLeave={()=> {setIsHovered(false)}}>
 
