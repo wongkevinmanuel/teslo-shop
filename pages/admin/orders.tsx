@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react'
-import useSWR from 'swr'
-
+import { Chip, Grid } from '@mui/material';
 import { DataGrid, GridColDef, GridRowsProp, GridValueGetterParams } from '@mui/x-data-grid';
+
 import { ConfirmationNumberOutlined } from '@mui/icons-material';
 
 import { IOrder, IUser } from '../../interfaces'
 import { AdminLayout } from '../../components/layouts';
-import { Chip, Grid } from '@mui/material';
 
+import React, { useEffect, useState } from 'react'
+import useSWR from 'swr'
 
-
-const ordersPage = () => {
+const OrdersPage = () => {
 
     const {data, error } = useSWR< IOrder[] > ('/api/admin/orders');
     
@@ -20,7 +19,6 @@ const ordersPage = () => {
             setOrders(data);
         }
     },[data]) //agreglo de dependencia
-
 
     if(!data && !error ) (<></>);
 
@@ -53,8 +51,10 @@ const ordersPage = () => {
         { field: 'createdAt', headerName: 'Creada en' , width: 300 },
     ];
 
+    console.log("Numero de ordenes: "+ orders.length);
+
     const rows:GridRowsProp = orders.map(order=>({
-        id          : order._id,
+        id          : order._id, 
         email       : (order.user as IUser).email,
         name        : (order.user as IUser).name,
         total       : order.total,
@@ -66,7 +66,7 @@ const ordersPage = () => {
   return (
     <AdminLayout
         title={'Ordenes'} subTitle={'Mantenimiento de ordenes'} 
-        icon={<ConfirmationNumberOutlined /> }>
+        icon={<ConfirmationNumberOutlined className='fadeIn'/> }>
         <Grid item xs={12} sx={{ height:650, width: '100%' }}>
             <DataGrid
                 rows={rows} 
@@ -77,4 +77,4 @@ const ordersPage = () => {
   )
 }
 
-export default ordersPage
+export default OrdersPage
