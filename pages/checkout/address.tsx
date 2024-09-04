@@ -1,18 +1,18 @@
 import React, { useContext, useEffect } from 'react'
+
 import { useRouter } from 'next/router'
 import { Box, Button, FormControl, Grid, InputLabel, Link, MenuItem, TextField, Typography } from '@mui/material'
 import Cookies from 'js-cookie'
 import { useForm } from 'react-hook-form'
 
 import { ShopLayout } from '../../components/layouts'
-import { countries, jwt } from '../../utils'
 import CartContext from '../../context/cart/CartContext'
 
 type FormData = {
     firstName   : string,
     lastName    : string,
     address     : string,
-    address2    : string,
+    address2?   : string,
     zip         : string,
     city        : string,
     country     : string,
@@ -33,6 +33,9 @@ const getAddressFromCookies = (): FormData =>{
 }
 
 const address = () => {
+    const router = useRouter();
+    const {updateAddress} = useContext(CartContext);
+
     //registrar react form
     const {register, handleSubmit, formState: {errors},  reset } = useForm<FormData>(
         {
@@ -55,11 +58,8 @@ const address = () => {
     useEffect(()=>{
         reset(getAddressFromCookies() );
     }, [reset])
-
-    const router = useRouter();
-    //TODO:
-    const {updateAddress} = useContext(CartContext);
-
+    
+    
     const onSubmitRevisarPedido = ( {
         firstName,
         lastName,
