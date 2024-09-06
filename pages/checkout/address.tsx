@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react'
-
 import { useRouter } from 'next/router'
+
 import { Box, Button, FormControl, Grid, InputLabel, Link, MenuItem, TextField, Typography } from '@mui/material'
 import Cookies from 'js-cookie'
 import { useForm } from 'react-hook-form'
@@ -12,7 +12,7 @@ type FormData = {
     firstName   : string,
     lastName    : string,
     address     : string,
-    address2?   : string,
+    address2   : string,
     zip         : string,
     city        : string,
     country     : string,
@@ -32,7 +32,7 @@ const getAddressFromCookies = (): FormData =>{
     };
 }
 
-const address = () => {
+const AddressPage = () => {
     const router = useRouter();
     const {updateAddress} = useContext(CartContext);
 
@@ -40,16 +40,6 @@ const address = () => {
     const {register, handleSubmit, formState: {errors},  reset } = useForm<FormData>(
         {
             defaultValues: getAddressFromCookies()
-            /*defaultValues:{
-                firstName: '',
-                lastName: '',
-                address: '',
-                address2: '',
-                zip: '',
-                city: '',
-                country: '',
-                phone:''
-            }*/
         }
     );
     
@@ -58,7 +48,6 @@ const address = () => {
     useEffect(()=>{
         reset(getAddressFromCookies() );
     }, [reset])
-    
     
     const onSubmitRevisarPedido = ( {
         firstName,
@@ -91,14 +80,15 @@ const address = () => {
             updateAddress(d);
             router.push('/checkout/summary');
             
-        }
+    }
 
-        //TODO: Arreglar: Establecer el valor del campo pais TextField 
-        //de las cookies. defaultValue={ Cookies.get('country') || countries[0].code }
+    //TODO: Arreglar: Establecer el valor del campo pais TextField 
+    //de las cookies. defaultValue={ Cookies.get('country') || countries[0].code }
     return (
     <ShopLayout title='Dirección' pageDiscription='Confirmar dirección del destino' >
         <form onSubmit={handleSubmit( onSubmitRevisarPedido)}>
-        <Typography variant='h1' component='h1'> Direccion </Typography>
+        
+        <Typography variant='h1' component='h1'> Dirección </Typography>
 
         <Grid container spacing={ 2 } sx={{ mt:2}}>
             {/* xs = pantallas muy pequenas sm= pantallas no tan pequenas */}
@@ -149,6 +139,7 @@ const address = () => {
                     </Link>
                 </Box>
             </Grid>
+            
             <Grid item xs={12} sm={6}>
                 <TextField label='Ciudad' variant='filled' fullWidth 
                 {...register('city',{required: 'La ciudad es requerido'
@@ -188,7 +179,7 @@ const address = () => {
   )
 }
 
-export default address;
+export default AddressPage;
 
 //Verificar del lado servidor, si esta autenticado
 //de lo contrario no mostrar pagina
