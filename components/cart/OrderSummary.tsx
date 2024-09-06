@@ -11,11 +11,9 @@ interface Props{
 //{numberOfItems = 0,subTotal = 0, tax=0,total = 0}
 export const OrderSummary:FC<Props> = ( {orderSummaryData } ) => {
 
-    const {numberOfItems,
-         subTotal,
-         total ,
-         tax } = orderSummaryData ? orderSummaryData : useContext(CartContext);
-    
+    const {numberOfItems, subTotal, total, tax } = useContext(CartContext);
+    const summaryValues = orderSummaryData ? orderSummaryData : { numberOfItems, subTotal, total, tax};
+
     //const {numberOfItems = orderSummaryData.numberOfItems,
     //subTotal = orderSummaryData.subTotal,
     //total = orderSummaryData.total,
@@ -29,28 +27,28 @@ export const OrderSummary:FC<Props> = ( {orderSummaryData } ) => {
             <Typography> No. Productos</Typography>
         </Grid>
         <Grid item xs={6} display='flex' justifyContent='end'>
-            <Typography>{numberOfItems}</Typography>
+            <Typography>{summaryValues.numberOfItems}{summaryValues.numberOfItems > 1 ? ' productos': ' producto'}</Typography>
         </Grid>
         
         <Grid item xs={6}>
             <Typography> SubTotal</Typography>
         </Grid>
         <Grid item xs={6} display='flex' justifyContent='end'>
-            <Typography> {currency.format(subTotal)} </Typography>
+            <Typography> {currency.format(summaryValues.subTotal)} </Typography>
         </Grid>
         
         <Grid item xs={6}>
             <Typography> Impuestos ({ Number(process.env.NEXT_PUBLIC_TAX_RATE) * 100}%) </Typography>
         </Grid>
         <Grid item xs={6} display='flex' justifyContent='end'>
-            <Typography> {currency.format(tax)} </Typography>
+            <Typography> {currency.format(summaryValues.tax)} </Typography>
         </Grid>
         
         <Grid item xs={6}>
             <Typography variant='subtitle1'> Total: </Typography>
         </Grid>
         <Grid item xs={6} display='flex' justifyContent='end'>
-            <Typography variant='subtitle1'> {currency.format(total)} </Typography>
+            <Typography variant='subtitle1'> {currency.format(summaryValues.total)} </Typography>
         </Grid>
 
     </Grid>
