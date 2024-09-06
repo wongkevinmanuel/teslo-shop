@@ -11,13 +11,13 @@ interface Props{
     order: IOrder;
 }
 
-const OrderPage:FC<Props> = ({order = {} }) => {
+const OrderPage:FC<Props> = ({order }) => {
 
     //if ( !order  ||  order == undefined){
     //    order.shippingAddress = {};
     //}
 
-    const { shippingAddress= { } } = order;
+    const { shippingAddress } = order;
 
     return (
 
