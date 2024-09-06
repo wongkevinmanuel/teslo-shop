@@ -1,7 +1,7 @@
 import { ConfirmationNumberOutlined } from '@mui/icons-material';
 
 import { Chip, Grid } from '@mui/material';
-import { DataGrid, GridColDef, GridRowsProp, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef, GridRowsProp, GridValueGetterParams , GridRenderCellParams} from '@mui/x-data-grid';
 
 import React, { useEffect, useState } from 'react'
 import useSWR from 'swr'
@@ -30,7 +30,7 @@ const OrdersPage = () => {
         { field: 'isPaid'
             , headerName: 'Pagada'
             , width: 125
-            , renderCell: ({row}: GridValueGetterParams) => {
+            , renderCell: ({row}: GridRenderCellParams<any, boolean> ) => {
                 return row.isPaid ?
                       ( <Chip variant='outlined' label='Pagada' color='success' />) 
                     : ( <Chip variant='outlined' label='Pendiente' color='error'/>)
@@ -39,7 +39,7 @@ const OrdersPage = () => {
         { field: 'numProducts', headerName: 'No.Productos', width: 125 , align:'center' },
         { field: 'check'
             , headerName: 'Ver orden'
-            , renderCell: ( {row}: GridValueGetterParams )=> {
+            , renderCell: ( {row}: GridRenderCellParams<any, string> )=> {
                 return (
                     <a href={`/admin/orders/${row.id}`} target='_blank' rel='noreferrer' > Ver Orden</a>
                 )
