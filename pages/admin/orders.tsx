@@ -1,13 +1,13 @@
+import { ConfirmationNumberOutlined } from '@mui/icons-material';
+
 import { Chip, Grid } from '@mui/material';
 import { DataGrid, GridColDef, GridRowsProp, GridValueGetterParams } from '@mui/x-data-grid';
 
-import { ConfirmationNumberOutlined } from '@mui/icons-material';
+import React, { useEffect, useState } from 'react'
+import useSWR from 'swr'
 
 import { IOrder, IUser } from '../../interfaces'
 import { AdminLayout } from '../../components/layouts';
-
-import React, { useEffect, useState } from 'react'
-import useSWR from 'swr'
 
 const OrdersPage = () => {
 
@@ -26,10 +26,7 @@ const OrdersPage = () => {
         { field: 'id', headerName: 'Orden ID', width: 250 },
         { field: 'email', headerName: 'Correo', width: 250 },
         { field: 'name', headerName: 'Nombres', width: 300 },
-        { field: 'total', headerName: 'Monto Total', width: 150,
-                renderCell: ({row}: GridValueGetterParams)=> {
-                    return (<>${row.total}</>);    
-                } },
+        { field: 'total', headerName: 'Monto Total', width: 150},
         { field: 'isPaid'
             , headerName: 'Pagada'
             , width: 125
@@ -50,9 +47,7 @@ const OrdersPage = () => {
         },
         { field: 'createdAt', headerName: 'Creada en' , width: 300 },
     ];
-
-    console.log("Numero de ordenes: "+ orders.length);
-
+    
     const rows:GridRowsProp = orders.map(order=>({
         id          : order._id, 
         email       : (order.user as IUser).email,
